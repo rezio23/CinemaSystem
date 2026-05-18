@@ -1,35 +1,21 @@
-# Compiled class files
-*.class
+# ============================================================
+# CINEMA MANAGEMENT SYSTEM — GITIGNORE
+# ============================================================
 
-# Maven build output
-target/
+# --- Build output ---
+# Maven
+/target/
 !target/classes/.gitkeep
 
-# Local dependency cache (Maven wrapper or manual lib folder)
-lib/
-
-# Log files
-*.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# Compiled class files (anywhere)
+*.class
 
 # Package files
 *.jar
 *.war
-*.nar
 *.ear
-*.zip
-*.tar.gz
-*.rar
 
-# Virtual machine crash logs
-hs_err_pid*
-replay_pid*
-
+# --- IDE / Editor ---
 # IntelliJ IDEA
 .idea/
 *.iml
@@ -53,7 +39,23 @@ nbdist/
 # VS Code
 .vscode/
 
-# OS files
+# --- OS files ---
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# --- Logs & temp ---
+*.log
+*.tmp
+*.swp
+*~
+
+# --- Oracle / Database ---
+# Sample data and any local SQL scripts with sensitive info
+sample_data_oracle.sql
+*.sql
+!schema.sql
+
+# --- Project-specific ---
+# Manual compile temp file from run.bat
+sources.txt

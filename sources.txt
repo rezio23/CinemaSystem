@@ -20,6 +20,7 @@ src/main/java/com/cinema/ui/BookingPanel.java
 src/main/java/com/cinema/ui/components/BarChartPanel.java
 src/main/java/com/cinema/ui/components/SearchField.java
 src/main/java/com/cinema/ui/components/SidebarButton.java
+src/main/java/com/cinema/ui/components/SidebarIcon.java
 src/main/java/com/cinema/ui/components/StatCard.java
 src/main/java/com/cinema/ui/CustomerPanel.java
 src/main/java/com/cinema/ui/DashboardPanel.java

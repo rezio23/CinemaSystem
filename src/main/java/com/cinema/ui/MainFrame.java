@@ -1,6 +1,7 @@
 package com.cinema.ui;
 
 import com.cinema.ui.components.SidebarButton;
+import com.cinema.ui.components.SidebarIcon;
 import com.cinema.util.Constants;
 
 import javax.swing.*;
@@ -26,7 +27,7 @@ public class MainFrame extends JFrame {
         JPanel sidebar = createSidebar();
         root.add(sidebar, BorderLayout.WEST);
 
-        // Content area with subtle rounded card feel
+        // Content area
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
         contentPanel.setBackground(Constants.COLOR_BACKGROUND);
@@ -56,7 +57,7 @@ public class MainFrame extends JFrame {
         sidebar.setBorder(BorderFactory.createEmptyBorder(24, 16, 24, 16));
 
         // Logo area
-        JLabel logoIcon = new JLabel(""); // film icon unicode or simple text
+        JLabel logoIcon = new JLabel(""); // film unicode symbol placeholder
         logoIcon.setFont(new Font("Segoe UI", Font.PLAIN, 32));
         logoIcon.setForeground(Constants.COLOR_PRIMARY);
         logoIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -76,14 +77,14 @@ public class MainFrame extends JFrame {
         logoWrap.setBorder(BorderFactory.createEmptyBorder(0, 0, 32, 0));
         sidebar.add(logoWrap);
 
-        addNavButton(sidebar, "Dashboard", "📊", "DASHBOARD");
-        addNavButton(sidebar, "Sell Tickets", "🎟", "BOOKING");
-        addNavButton(sidebar, "Movies", "🎬", "MOVIES");
-        addNavButton(sidebar, "Halls", "🏠", "HALLS");
-        addNavButton(sidebar, "Staff", "💼", "STAFF");
-        addNavButton(sidebar, "Customers", "👥", "CUSTOMERS");
-        addNavButton(sidebar, "Shows", "📅", "SHOWS");
-        addNavButton(sidebar, "Reports", "📈", "REPORTS");
+        addNavButton(sidebar, "Dashboard", SidebarIcon.Type.DASHBOARD, "DASHBOARD");
+        addNavButton(sidebar, "Sell Tickets", SidebarIcon.Type.TICKETS, "BOOKING");
+        addNavButton(sidebar, "Movies", SidebarIcon.Type.MOVIES, "MOVIES");
+        addNavButton(sidebar, "Halls", SidebarIcon.Type.HALLS, "HALLS");
+        addNavButton(sidebar, "Staff", SidebarIcon.Type.STAFF, "STAFF");
+        addNavButton(sidebar, "Customers", SidebarIcon.Type.CUSTOMERS, "CUSTOMERS");
+        addNavButton(sidebar, "Shows", SidebarIcon.Type.SHOWS, "SHOWS");
+        addNavButton(sidebar, "Reports", SidebarIcon.Type.REPORTS, "REPORTS");
 
         sidebar.add(Box.createVerticalGlue());
 
@@ -96,8 +97,8 @@ public class MainFrame extends JFrame {
         return sidebar;
     }
 
-    private void addNavButton(JPanel sidebar, String text, String icon, String name) {
-        SidebarButton btn = new SidebarButton(text, icon);
+    private void addNavButton(JPanel sidebar, String text, SidebarIcon.Type iconType, String name) {
+        SidebarButton btn = new SidebarButton(text, new SidebarIcon(iconType));
         btn.setAlignmentX(Component.CENTER_ALIGNMENT);
         btn.addActionListener(e -> switchPanel(name));
         navButtons.put(name, btn);

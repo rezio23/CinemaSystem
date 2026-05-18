@@ -185,6 +185,14 @@ public class DashboardPanel extends JPanel implements MainFrame.Refreshable {
                         }
                     });
                 } catch (Exception ex) {
+                    SwingUtilities.invokeLater(() -> {
+                        JOptionPane.showMessageDialog(
+                            DashboardPanel.this,
+                            "Database error: " + ex.getMessage() + "\n\nPlease verify:\n1. Oracle is running\n2. Tables exist (run schema_oracle.sql)\n3. Data is inserted (run sample_data_oracle.sql)",
+                            "Database Error",
+                            JOptionPane.ERROR_MESSAGE
+                        );
+                    });
                     ex.printStackTrace();
                 }
                 return null;
