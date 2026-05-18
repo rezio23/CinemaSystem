@@ -5,7 +5,9 @@ import com.cinema.util.DBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BookingDao {
 
@@ -172,6 +174,21 @@ public class BookingDao {
             throw new RuntimeException("Failed to get today's revenue", e);
         }
         return 0;
+    }
+
+    public Map<String, Integer> countByStatus() {
+        String sql = "SELECT status, COUNT(*) FROM BOOKING GROUP BY status";
+        Map<String, Integer> map = new HashMap<>();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                map.put(rs.getString(1), rs.getInt(2));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to count by status", e);
+        }
+        return map;
     }
 
     private Booking map(ResultSet rs) throws SQLException {

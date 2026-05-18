@@ -83,6 +83,9 @@ public class SidebarButton extends JButton {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.06f));
             g2.fill(new RoundRectangle2D.Float(0, 0, w, h, 8, 8));
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            setForeground(Constants.COLOR_TEXT);
+        } else {
+            setForeground(Constants.COLOR_TEXT_MUTED);
         }
 
         g2.dispose();

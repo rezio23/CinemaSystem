@@ -15,7 +15,7 @@ public class SearchField extends JPanel {
         setLayout(new BorderLayout(8, 0));
         setBackground(Constants.COLOR_CARD_ELEVATED);
         setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Constants.COLOR_BORDER, 1, true),
+                BorderFactory.createLineBorder(new Color(0x3A3A3A), 1, true),
                 BorderFactory.createEmptyBorder(8, 14, 8, 14)
         ));
 
@@ -44,7 +44,7 @@ public class SearchField extends JPanel {
                     field.setForeground(Constants.COLOR_TEXT_MUTED);
                 }
                 SearchField.this.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(Constants.COLOR_BORDER, 1, true),
+                        BorderFactory.createLineBorder(new Color(0x3A3A3A), 1, true),
                         BorderFactory.createEmptyBorder(8, 14, 8, 14)
                 ));
             }

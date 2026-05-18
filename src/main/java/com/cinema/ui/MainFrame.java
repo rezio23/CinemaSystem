@@ -57,7 +57,7 @@ public class MainFrame extends JFrame {
         sidebar.setBorder(BorderFactory.createEmptyBorder(24, 16, 24, 16));
 
         // Logo area
-        JLabel logoIcon = new JLabel(""); // film unicode symbol placeholder
+        JLabel logoIcon = new JLabel("🎬");
         logoIcon.setFont(new Font("Segoe UI", Font.PLAIN, 32));
         logoIcon.setForeground(Constants.COLOR_PRIMARY);
         logoIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -111,7 +111,6 @@ public class MainFrame extends JFrame {
         for (Map.Entry<String, SidebarButton> entry : navButtons.entrySet()) {
             entry.getValue().setActive(entry.getKey().equals(name));
         }
-        // Refresh data when switching
         Component comp = contentPanel.getComponent(0);
         for (Component c : contentPanel.getComponents()) {
             if (c.isVisible()) {
