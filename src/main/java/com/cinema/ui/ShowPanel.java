@@ -1,0 +1,200 @@
+package com.cinema.ui;
+
+import com.cinema.dao.HallDao;
+import com.cinema.dao.MovieDao;
+import com.cinema.dao.MovieShowDao;
+import com.cinema.model.Hall;
+import com.cinema.model.Movie;
+import com.cinema.model.MovieShow;
+import com.cinema.ui.dialog.FormDialog;
+import com.cinema.util.Constants;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+public class ShowPanel extends JPanel implements MainFrame.Refreshable {
+
+    private final MovieShowDao showDao = new MovieShowDao();
+    private final MovieDao movieDao = new MovieDao();
+    private final HallDao hallDao = new HallDao();
+
+    private final DefaultTableModel model;
+    private final JTable table;
+
+    public ShowPanel() {
+        setLayout(new BorderLayout(15, 15));
+        setBackground(Constants.COLOR_BACKGROUND);
+        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JPanel north = new JPanel(new BorderLayout());
+        north.setOpaque(false);
+
+        JLabel header = new JLabel("Show Management");
+        header.setFont(Constants.FONT_HEADER);
+        header.setForeground(Constants.COLOR_TEXT);
+        north.add(header, BorderLayout.NORTH);
+
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        btnPanel.setOpaque(false);
+        JButton addBtn = new JButton("+ Add Show");
+        addBtn.setFont(Constants.FONT_BODY);
+        addBtn.setBackground(Constants.COLOR_SUCCESS);
+        addBtn.setForeground(Color.WHITE);
+        addBtn.setFocusPainted(false);
+        addBtn.addActionListener(e -> addShow());
+
+        JButton editBtn = new JButton("Edit");
+        editBtn.setFont(Constants.FONT_BODY);
+        editBtn.addActionListener(e -> editShow());
+
+        JButton delBtn = new JButton("Delete");
+        delBtn.setFont(Constants.FONT_BODY);
+        delBtn.setBackground(Constants.COLOR_DANGER);
+        delBtn.setForeground(Color.WHITE);
+        delBtn.setFocusPainted(false);
+        delBtn.addActionListener(e -> deleteShow());
+
+        btnPanel.add(addBtn);
+        btnPanel.add(editBtn);
+        btnPanel.add(delBtn);
+        north.add(btnPanel, BorderLayout.SOUTH);
+        add(north, BorderLayout.NORTH);
+
+        model = new DefaultTableModel(new String[]{"ID", "Movie", "Hall", "Date/Time", "Base Price"}, 0) {
+            @Override public boolean isCellEditable(int row, int column) { return false; }
+        };
+        table = new JTable(model);
+        table.setFont(Constants.FONT_BODY);
+        table.setRowHeight(28);
+        table.getTableHeader().setFont(Constants.FONT_BODY);
+        add(new JScrollPane(table), BorderLayout.CENTER);
+
+        refreshData();
+    }
+
+    @Override
+    public void refreshData() {
+        SwingUtilities.invokeLater(() -> {
+            model.setRowCount(0);
+            List<MovieShow> list = showDao.getAll();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            for (MovieShow s : list) {
+                model.addRow(new Object[]{s.getShowId(), s.getMovieTitle(), s.getHallName(),
+                        s.getShowDateTime() != null ? s.getShowDateTime().format(dtf) : "",
+                        "$" + s.getBasePrice()});
+            }
+        });
+    }
+
+    private void addShow() {
+        MovieShow s = showForm(null);
+        if (s != null) {
+            try {
+                if (showDao.hasOverlap(s.getHallId(), s.getShowDateTime(), s.getShowDateTime().plusMinutes(150), null)) {
+                    JOptionPane.showMessageDialog(this, "There is already a show in this hall around that time.", "Overlap", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                showDao.insert(s);
+                refreshData();
+                JOptionPane.showMessageDialog(this, "Show added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void editShow() {
+        int row = table.getSelectedRow();
+        if (row < 0) return;
+        int id = (int) model.getValueAt(row, 0);
+        MovieShow existing = showDao.getById(id);
+        MovieShow updated = showForm(existing);
+        if (updated != null) {
+            try {
+                updated.setShowId(id);
+                if (showDao.hasOverlap(updated.getHallId(), updated.getShowDateTime(), updated.getShowDateTime().plusMinutes(150), id)) {
+                    JOptionPane.showMessageDialog(this, "There is already a show in this hall around that time.", "Overlap", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                showDao.update(updated);
+                refreshData();
+                JOptionPane.showMessageDialog(this, "Show updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void deleteShow() {
+        int row = table.getSelectedRow();
+        if (row < 0) return;
+        int id = (int) model.getValueAt(row, 0);
+        int confirm = JOptionPane.showConfirmDialog(this, "Delete this show?", "Confirm", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                showDao.delete(id);
+                refreshData();
+                JOptionPane.showMessageDialog(this, "Show deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private MovieShow showForm(MovieShow s) {
+        List<Movie> movies = movieDao.getAll();
+        List<Hall> halls = hallDao.getAll();
+
+        JComboBox<Movie> movieCombo = new JComboBox<>();
+        for (Movie m : movies) movieCombo.addItem(m);
+
+        JComboBox<Hall> hallCombo = new JComboBox<>();
+        for (Hall h : halls) hallCombo.addItem(h);
+
+        JTextField dateTime = new JTextField(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        JTextField price = new JTextField("10.00");
+
+        if (s != null) {
+            for (int i = 0; i < movieCombo.getItemCount(); i++) {
+                if (movieCombo.getItemAt(i).getMovieId() == s.getMovieId()) {
+                    movieCombo.setSelectedIndex(i);
+                    break;
+                }
+            }
+            for (int i = 0; i < hallCombo.getItemCount(); i++) {
+                if (hallCombo.getItemAt(i).getHallId() == s.getHallId()) {
+                    hallCombo.setSelectedIndex(i);
+                    break;
+                }
+            }
+            dateTime.setText(s.getShowDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+            price.setText(s.getBasePrice().toString());
+        }
+
+        FormDialog dlg = new FormDialog(SwingUtilities.getWindowAncestor(this), s == null ? "Add Show" : "Edit Show", 4);
+        dlg.addField("Movie:", movieCombo);
+        dlg.addField("Hall:", hallCombo);
+        dlg.addField("Date/Time:", dateTime);
+        dlg.addField("Base Price:", price);
+        dlg.setVisible(true);
+
+        if (dlg.isConfirmed()) {
+            try {
+                MovieShow show = new MovieShow();
+                show.setMovieId(((Movie) movieCombo.getSelectedItem()).getMovieId());
+                show.setHallId(((Hall) hallCombo.getSelectedItem()).getHallId());
+                show.setShowDateTime(LocalDateTime.parse(dateTime.getText().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                show.setBasePrice(new BigDecimal(price.getText().trim()));
+                return show;
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Invalid date or price format. Use yyyy-MM-dd HH:mm", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        return null;
+    }
+}
