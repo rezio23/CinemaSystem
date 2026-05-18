@@ -1,6 +1,7 @@
 package com.cinema.ui.components;
 
 import com.cinema.util.Constants;
+import com.formdev.flatlaf.FlatClientProperties;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,11 +14,14 @@ public class StatCard extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Constants.COLOR_CARD);
         setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 5, 0, 0, accentColor),
-                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+                BorderFactory.createMatteBorder(0, 4, 0, 0, accentColor),
+                BorderFactory.createEmptyBorder(20, 20, 20, 20)
         ));
 
-        titleLabel = new JLabel(title);
+        // Rounded corners via FlatLaf client property
+        putClientProperty(FlatClientProperties.STYLE, "arc: 12");
+
+        titleLabel = new JLabel(title.toUpperCase());
         titleLabel.setFont(Constants.FONT_SMALL);
         titleLabel.setForeground(Constants.COLOR_TEXT_MUTED);
 

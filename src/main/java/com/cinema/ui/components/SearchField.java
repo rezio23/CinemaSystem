@@ -12,11 +12,11 @@ public class SearchField extends JPanel {
 
     public SearchField(String placeholder, Runnable onSearch) {
         this.placeholder = placeholder;
-        setLayout(new BorderLayout(5, 0));
-        setBackground(Constants.COLOR_CARD);
+        setLayout(new BorderLayout(8, 0));
+        setBackground(Constants.COLOR_CARD_ELEVATED);
         setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Constants.COLOR_TEXT_MUTED, 1, true),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+                BorderFactory.createLineBorder(Constants.COLOR_BORDER, 1, true),
+                BorderFactory.createEmptyBorder(8, 14, 8, 14)
         ));
 
         field = new JTextField(placeholder);
@@ -24,6 +24,7 @@ public class SearchField extends JPanel {
         field.setBorder(null);
         field.setOpaque(false);
         field.setForeground(Constants.COLOR_TEXT_MUTED);
+        field.setCaretColor(Constants.COLOR_TEXT);
         field.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent e) {
@@ -31,6 +32,10 @@ public class SearchField extends JPanel {
                     field.setText("");
                     field.setForeground(Constants.COLOR_TEXT);
                 }
+                SearchField.this.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Constants.COLOR_PRIMARY, 1, true),
+                        BorderFactory.createEmptyBorder(8, 14, 8, 14)
+                ));
             }
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
@@ -38,6 +43,10 @@ public class SearchField extends JPanel {
                     field.setText(placeholder);
                     field.setForeground(Constants.COLOR_TEXT_MUTED);
                 }
+                SearchField.this.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Constants.COLOR_BORDER, 1, true),
+                        BorderFactory.createEmptyBorder(8, 14, 8, 14)
+                ));
             }
         });
 
@@ -47,6 +56,7 @@ public class SearchField extends JPanel {
         searchBtn.setBorderPainted(false);
         searchBtn.setContentAreaFilled(false);
         searchBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        searchBtn.setForeground(Constants.COLOR_TEXT_MUTED);
 
         add(field, BorderLayout.CENTER);
         add(searchBtn, BorderLayout.EAST);

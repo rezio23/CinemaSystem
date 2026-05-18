@@ -1,4 +1,3 @@
-
 package com.cinema.ui;
 
 import com.cinema.dao.*;
@@ -9,7 +8,6 @@ import com.cinema.util.Constants;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +23,9 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
     private final JPanel contentPanel;
 
     public ReportsPanel() {
-        setLayout(new BorderLayout(15, 15));
+        setLayout(new BorderLayout(20, 20));
         setBackground(Constants.COLOR_BACKGROUND);
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
 
         JPanel north = new JPanel(new BorderLayout());
         north.setOpaque(false);
@@ -42,6 +40,7 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
         String[] views = {"Revenue per Movie", "Daily Revenue", "Weekly Revenue", "Monthly Revenue", "Occupancy", "Customer History", "Taken Seats"};
         JComboBox<String> viewCombo = new JComboBox<>(views);
         viewCombo.setFont(Constants.FONT_BODY);
+        viewCombo.setBackground(Constants.COLOR_CARD_ELEVATED);
         viewCombo.addActionListener(e -> switchView((String) viewCombo.getSelectedItem()));
         toolbar.add(new JLabel("Report:"));
         toolbar.add(viewCombo);
@@ -73,19 +72,55 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
         // panels refresh lazily on view switch; can be enhanced
     }
 
+    private JTable createStyledTable(DefaultTableModel model) {
+        JTable table = new JTable(model);
+        table.setFont(Constants.FONT_BODY);
+        table.setRowHeight(40);
+        table.setFillsViewportHeight(true);
+        table.setShowGrid(false);
+        table.setIntercellSpacing(new Dimension(0, 0));
+        table.setSelectionBackground(Constants.COLOR_PRIMARY);
+        table.setSelectionForeground(Color.WHITE);
+        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
+        table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setPreferredSize(new Dimension(0, 40));
+        return table;
+    }
+
+    private JScrollPane createScroll(JTable table) {
+        JScrollPane scroll = new JScrollPane(table);
+        scroll.setBorder(BorderFactory.createEmptyBorder());
+        scroll.getViewport().setOpaque(false);
+        scroll.setOpaque(false);
+        return scroll;
+    }
+
+    private JPanel wrapInCard(JComponent comp, String title) {
+        JPanel card = new JPanel(new BorderLayout());
+        card.setBackground(Constants.COLOR_CARD);
+        card.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
+
+        if (title != null && !title.isEmpty()) {
+            JLabel titleLabel = new JLabel(title);
+            titleLabel.setFont(Constants.FONT_SUBHEADER);
+            titleLabel.setForeground(Constants.COLOR_TEXT);
+            titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 12, 0));
+            card.add(titleLabel, BorderLayout.NORTH);
+        }
+        card.add(comp, BorderLayout.CENTER);
+        return card;
+    }
+
     private JPanel createRevenueMoviePanel() {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout(16, 16));
         panel.setOpaque(false);
 
         DefaultTableModel model = new DefaultTableModel(new String[]{"Movie", "Total Revenue", "Tickets Sold"}, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
-        JTable table = new JTable(model);
-        table.setFont(Constants.FONT_BODY);
-        table.setRowHeight(28);
-        JScrollPane scroll = new JScrollPane(table);
-        scroll.setPreferredSize(new Dimension(0, 200));
-        panel.add(scroll, BorderLayout.NORTH);
+        JTable table = createStyledTable(model);
+        JPanel tableCard = wrapInCard(createScroll(table), "Revenue per Movie");
+        panel.add(tableCard, BorderLayout.NORTH);
 
         JPanel chartHolder = new JPanel(new BorderLayout());
         chartHolder.setOpaque(false);
@@ -104,20 +139,21 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
             chartHolder.revalidate();
             chartHolder.repaint();
         });
-        panel.add(loadBtn, BorderLayout.SOUTH);
+        JPanel btnWrap = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        btnWrap.setOpaque(false);
+        btnWrap.add(loadBtn);
+        panel.add(btnWrap, BorderLayout.SOUTH);
         return panel;
     }
 
     private JPanel createDailyPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout(16, 16));
         panel.setOpaque(false);
         DefaultTableModel model = new DefaultTableModel(new String[]{"Day", "Bookings", "Revenue"}, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
-        JTable table = new JTable(model);
-        table.setFont(Constants.FONT_BODY);
-        table.setRowHeight(28);
-        panel.add(new JScrollPane(table), BorderLayout.CENTER);
+        JTable table = createStyledTable(model);
+        panel.add(wrapInCard(createScroll(table), "Daily Revenue"), BorderLayout.CENTER);
         JButton loadBtn = new JButton("Load Data");
         loadBtn.setFont(Constants.FONT_BODY);
         loadBtn.addActionListener(e -> {
@@ -127,20 +163,21 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
                 model.addRow(new Object[]{row.get("day"), row.get("bookings"), "$" + row.get("revenue")});
             }
         });
-        panel.add(loadBtn, BorderLayout.SOUTH);
+        JPanel btnWrap = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        btnWrap.setOpaque(false);
+        btnWrap.add(loadBtn);
+        panel.add(btnWrap, BorderLayout.SOUTH);
         return panel;
     }
 
     private JPanel createWeeklyPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout(16, 16));
         panel.setOpaque(false);
         DefaultTableModel model = new DefaultTableModel(new String[]{"Week Start", "Bookings", "Revenue"}, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
-        JTable table = new JTable(model);
-        table.setFont(Constants.FONT_BODY);
-        table.setRowHeight(28);
-        panel.add(new JScrollPane(table), BorderLayout.CENTER);
+        JTable table = createStyledTable(model);
+        panel.add(wrapInCard(createScroll(table), "Weekly Revenue"), BorderLayout.CENTER);
         JButton loadBtn = new JButton("Load Data");
         loadBtn.setFont(Constants.FONT_BODY);
         loadBtn.addActionListener(e -> {
@@ -150,20 +187,21 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
                 model.addRow(new Object[]{row.get("weekStart"), row.get("bookings"), "$" + row.get("revenue")});
             }
         });
-        panel.add(loadBtn, BorderLayout.SOUTH);
+        JPanel btnWrap = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        btnWrap.setOpaque(false);
+        btnWrap.add(loadBtn);
+        panel.add(btnWrap, BorderLayout.SOUTH);
         return panel;
     }
 
     private JPanel createMonthlyPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout(16, 16));
         panel.setOpaque(false);
         DefaultTableModel model = new DefaultTableModel(new String[]{"Month", "Bookings", "Revenue"}, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
-        JTable table = new JTable(model);
-        table.setFont(Constants.FONT_BODY);
-        table.setRowHeight(28);
-        panel.add(new JScrollPane(table), BorderLayout.CENTER);
+        JTable table = createStyledTable(model);
+        panel.add(wrapInCard(createScroll(table), "Monthly Revenue"), BorderLayout.CENTER);
         JButton loadBtn = new JButton("Load Data");
         loadBtn.setFont(Constants.FONT_BODY);
         loadBtn.addActionListener(e -> {
@@ -173,20 +211,21 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
                 model.addRow(new Object[]{row.get("month"), row.get("bookings"), "$" + row.get("revenue")});
             }
         });
-        panel.add(loadBtn, BorderLayout.SOUTH);
+        JPanel btnWrap = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        btnWrap.setOpaque(false);
+        btnWrap.add(loadBtn);
+        panel.add(btnWrap, BorderLayout.SOUTH);
         return panel;
     }
 
     private JPanel createOccupancyPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout(16, 16));
         panel.setOpaque(false);
         DefaultTableModel model = new DefaultTableModel(new String[]{"Show", "Hall", "Seats Sold", "Capacity", "Occupancy %"}, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
-        JTable table = new JTable(model);
-        table.setFont(Constants.FONT_BODY);
-        table.setRowHeight(28);
-        panel.add(new JScrollPane(table), BorderLayout.CENTER);
+        JTable table = createStyledTable(model);
+        panel.add(wrapInCard(createScroll(table), "Occupancy per Show"), BorderLayout.CENTER);
         JButton loadBtn = new JButton("Load Data");
         loadBtn.setFont(Constants.FONT_BODY);
         loadBtn.addActionListener(e -> {
@@ -202,27 +241,29 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
                 });
             }
         });
-        panel.add(loadBtn, BorderLayout.SOUTH);
+        JPanel btnWrap = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        btnWrap.setOpaque(false);
+        btnWrap.add(loadBtn);
+        panel.add(btnWrap, BorderLayout.SOUTH);
         return panel;
     }
 
     private JPanel createCustomerHistoryPanel() {
-        JPanel panel = new JPanel(new BorderLayout(5, 5));
+        JPanel panel = new JPanel(new BorderLayout(16, 16));
         panel.setOpaque(false);
 
-        JPanel top = new JPanel(new BorderLayout(5, 0));
+        JPanel top = new JPanel(new BorderLayout(8, 0));
         top.setOpaque(false);
         JTextField custIdField = new JTextField(10);
+        custIdField.setBackground(Constants.COLOR_CARD_ELEVATED);
         top.add(new JLabel("Customer ID:"), BorderLayout.WEST);
         top.add(custIdField, BorderLayout.CENTER);
 
         DefaultTableModel model = new DefaultTableModel(new String[]{"Booking ID", "Movie", "Hall", "Show Time", "Seats", "Total", "Payment", "Status"}, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
-        JTable table = new JTable(model);
-        table.setFont(Constants.FONT_BODY);
-        table.setRowHeight(28);
-        panel.add(new JScrollPane(table), BorderLayout.CENTER);
+        JTable table = createStyledTable(model);
+        panel.add(wrapInCard(createScroll(table), "Customer History"), BorderLayout.CENTER);
 
         JButton loadBtn = new JButton("Load History");
         loadBtn.setFont(Constants.FONT_BODY);
@@ -249,12 +290,13 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
     }
 
     private JPanel createTakenSeatsPanel() {
-        JPanel panel = new JPanel(new BorderLayout(5, 5));
+        JPanel panel = new JPanel(new BorderLayout(16, 16));
         panel.setOpaque(false);
 
-        JPanel top = new JPanel(new BorderLayout(5, 0));
+        JPanel top = new JPanel(new BorderLayout(8, 0));
         top.setOpaque(false);
         JTextField showIdField = new JTextField(10);
+        showIdField.setBackground(Constants.COLOR_CARD_ELEVATED);
         top.add(new JLabel("Show ID:"), BorderLayout.WEST);
         top.add(showIdField, BorderLayout.CENTER);
         JButton loadBtn = new JButton("Load Seats");

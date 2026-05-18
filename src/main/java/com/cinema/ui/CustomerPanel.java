@@ -23,9 +23,9 @@ public class CustomerPanel extends JPanel implements MainFrame.Refreshable {
     private final SearchField searchField;
 
     public CustomerPanel() {
-        setLayout(new BorderLayout(15, 15));
+        setLayout(new BorderLayout(20, 20));
         setBackground(Constants.COLOR_BACKGROUND);
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
 
         JPanel north = new JPanel(new BorderLayout());
         north.setOpaque(false);
@@ -77,9 +77,13 @@ public class CustomerPanel extends JPanel implements MainFrame.Refreshable {
         };
         table = new JTable(model);
         table.setFont(Constants.FONT_BODY);
-        table.setRowHeight(28);
-        table.getTableHeader().setFont(Constants.FONT_BODY);
-        add(new JScrollPane(table), BorderLayout.CENTER);
+        table.setRowHeight(40);
+        table.setShowGrid(false);
+        table.setIntercellSpacing(new Dimension(0, 0));
+        table.setFillsViewportHeight(true);
+        JScrollPane scroll = new JScrollPane(table);
+        scroll.setBorder(BorderFactory.createEmptyBorder());
+        add(scroll, BorderLayout.CENTER);
 
         refreshData();
     }
@@ -180,8 +184,12 @@ public class CustomerPanel extends JPanel implements MainFrame.Refreshable {
         }
         JTable histTable = new JTable(histModel);
         histTable.setFont(Constants.FONT_BODY);
-        histTable.setRowHeight(28);
+        histTable.setRowHeight(40);
+        histTable.setShowGrid(false);
+        histTable.setIntercellSpacing(new Dimension(0, 0));
+        histTable.setFillsViewportHeight(true);
         JScrollPane scroll = new JScrollPane(histTable);
+        scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setPreferredSize(new Dimension(800, 300));
         JOptionPane.showMessageDialog(this, scroll, "Customer Booking History", JOptionPane.INFORMATION_MESSAGE);
     }

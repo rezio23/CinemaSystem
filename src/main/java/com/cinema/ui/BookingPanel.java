@@ -44,9 +44,9 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
     private Set<String> selectedSeats = new HashSet<>();
 
     public BookingPanel() {
-        setLayout(new BorderLayout(15, 15));
+        setLayout(new BorderLayout(20, 20));
         setBackground(Constants.COLOR_BACKGROUND);
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
 
         JLabel header = new JLabel("Sell Tickets");
         header.setFont(Constants.FONT_HEADER);
@@ -54,35 +54,43 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
         add(header, BorderLayout.NORTH);
 
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        split.setDividerLocation(500);
+        split.setDividerLocation(520);
         split.setOpaque(false);
+        split.setBorder(BorderFactory.createEmptyBorder());
 
-        // Left: Show selection + seats
-        JPanel left = new JPanel(new BorderLayout(10, 10));
+        // ========== LEFT: Show selection + seats ==========
+        JPanel left = new JPanel(new BorderLayout(16, 16));
         left.setOpaque(false);
 
-        JPanel showTop = new JPanel(new BorderLayout(5, 5));
-        showTop.setOpaque(false);
-        showTop.add(new JLabel("Select a Show"), BorderLayout.NORTH);
+        // Show search + table card
+        JPanel showCard = new JPanel(new BorderLayout(12, 12));
+        showCard.setBackground(Constants.COLOR_CARD);
+        showCard.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
+
+        JLabel showTitle = new JLabel("Select a Show");
+        showTitle.setFont(Constants.FONT_SUBHEADER);
+        showTitle.setForeground(Constants.COLOR_TEXT);
+        showCard.add(showTitle, BorderLayout.NORTH);
+
         showSearch = new SearchField("Search shows by movie or hall...", this::filterShows);
-        showTop.add(showSearch, BorderLayout.CENTER);
-        left.add(showTop, BorderLayout.NORTH);
+        showCard.add(showSearch, BorderLayout.CENTER);
 
         showModel = new DefaultTableModel(new String[]{"ID", "Movie", "Hall", "Date/Time", "Price"}, 0) {
             @Override public boolean isCellEditable(int row, int column) { return false; }
         };
-        showTable = new JTable(showModel);
-        showTable.setFont(Constants.FONT_BODY);
-        showTable.setRowHeight(28);
+        showTable = createStyledTable(showModel);
         showTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         showTable.getColumnModel().getColumn(0).setPreferredWidth(40);
         showTable.getColumnModel().getColumn(1).setPreferredWidth(180);
         showTable.getColumnModel().getColumn(2).setPreferredWidth(100);
         showTable.getColumnModel().getColumn(3).setPreferredWidth(130);
         showTable.getColumnModel().getColumn(4).setPreferredWidth(80);
+
         JScrollPane showScroll = new JScrollPane(showTable);
-        showScroll.setPreferredSize(new Dimension(0, 180));
-        left.add(showScroll, BorderLayout.CENTER);
+        showScroll.setBorder(BorderFactory.createEmptyBorder());
+        showScroll.setPreferredSize(new Dimension(0, 220));
+        showCard.add(showScroll, BorderLayout.SOUTH);
+        left.add(showCard, BorderLayout.NORTH);
 
         showTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && showTable.getSelectedRow() >= 0) {
@@ -91,60 +99,74 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
             }
         });
 
-        JPanel seatArea = new JPanel(new BorderLayout(5, 5));
-        seatArea.setOpaque(false);
+        // Seat area
+        JPanel seatCard = new JPanel(new BorderLayout(12, 12));
+        seatCard.setBackground(Constants.COLOR_CARD);
+        seatCard.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
+
         selectedShowLabel = new JLabel("No show selected");
         selectedShowLabel.setFont(Constants.FONT_SUBHEADER);
-        selectedShowLabel.setForeground(Constants.COLOR_TEXT);
-        seatArea.add(selectedShowLabel, BorderLayout.NORTH);
+        selectedShowLabel.setForeground(Constants.COLOR_TEXT_MUTED);
+        seatCard.add(selectedShowLabel, BorderLayout.NORTH);
 
         seatPanel = new SeatSelectionPanel(0, Collections.emptyList(), seats -> {
             selectedSeats = seats;
             updateTotal();
         });
-        seatArea.add(seatPanel, BorderLayout.CENTER);
+        seatCard.add(seatPanel, BorderLayout.CENTER);
 
-        JPanel seatBottom = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel seatBottom = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         seatBottom.setOpaque(false);
         clearBtn = new JButton("Clear Seats");
         clearBtn.setFont(Constants.FONT_BODY);
+        clearBtn.setFocusPainted(false);
+        clearBtn.setBackground(Constants.COLOR_CARD_ELEVATED);
+        clearBtn.setForeground(Constants.COLOR_TEXT);
         clearBtn.addActionListener(e -> {
             if (seatPanel != null) seatPanel.clearSelection();
         });
         seatBottom.add(clearBtn);
-        seatArea.add(seatBottom, BorderLayout.SOUTH);
+        seatCard.add(seatBottom, BorderLayout.SOUTH);
 
-        left.add(seatArea, BorderLayout.SOUTH);
+        left.add(seatCard, BorderLayout.CENTER);
         split.setLeftComponent(left);
 
-        // Right: Customer + payment + confirm
-        JPanel right = new JPanel(new BorderLayout(10, 10));
+        // ========== RIGHT: Customer + payment + confirm ==========
+        JPanel right = new JPanel(new BorderLayout(16, 16));
         right.setOpaque(false);
-        right.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
-        JPanel customerPanel = new JPanel(new BorderLayout(5, 5));
-        customerPanel.setOpaque(false);
-        customerPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Customer", 0, 0, Constants.FONT_SUBHEADER, Constants.COLOR_TEXT));
+        // Customer card
+        JPanel customerCard = new JPanel(new BorderLayout(12, 12));
+        customerCard.setBackground(Constants.COLOR_CARD);
+        customerCard.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 
-        JPanel customerSearchRow = new JPanel(new BorderLayout(5, 0));
+        JLabel customerTitle = new JLabel("Customer");
+        customerTitle.setFont(Constants.FONT_SUBHEADER);
+        customerTitle.setForeground(Constants.COLOR_TEXT);
+        customerCard.add(customerTitle, BorderLayout.NORTH);
+
+        JPanel customerSearchRow = new JPanel(new BorderLayout(8, 0));
         customerSearchRow.setOpaque(false);
         customerSearchField = new JTextField(20);
         customerSearchField.setFont(Constants.FONT_BODY);
         JButton searchCustomerBtn = new JButton("Search");
         searchCustomerBtn.setFont(Constants.FONT_BODY);
+        searchCustomerBtn.setFocusPainted(false);
         searchCustomerBtn.addActionListener(e -> searchCustomers());
         customerSearchRow.add(customerSearchField, BorderLayout.CENTER);
         customerSearchRow.add(searchCustomerBtn, BorderLayout.EAST);
-        customerPanel.add(customerSearchRow, BorderLayout.NORTH);
+        customerCard.add(customerSearchRow, BorderLayout.CENTER);
 
         customerListModel = new DefaultListModel<>();
         customerList = new JList<>(customerListModel);
         customerList.setFont(Constants.FONT_BODY);
         customerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        customerList.setFixedCellHeight(28);
+        customerList.setFixedCellHeight(36);
+        customerList.setBackground(Constants.COLOR_CARD_ELEVATED);
         JScrollPane customerScroll = new JScrollPane(customerList);
-        customerScroll.setPreferredSize(new Dimension(0, 120));
-        customerPanel.add(customerScroll, BorderLayout.CENTER);
+        customerScroll.setBorder(BorderFactory.createEmptyBorder());
+        customerScroll.setPreferredSize(new Dimension(0, 140));
+        customerCard.add(customerScroll, BorderLayout.SOUTH);
 
         customerList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
@@ -152,59 +174,92 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
             }
         });
 
-        newCustomerBtn = new JButton("+ New Customer");
-        newCustomerBtn.setFont(Constants.FONT_BODY);
-        newCustomerBtn.addActionListener(e -> openNewCustomerDialog());
-        JPanel customerBtnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        customerBtnPanel.setOpaque(false);
-        customerBtnPanel.add(newCustomerBtn);
-        customerPanel.add(customerBtnPanel, BorderLayout.SOUTH);
+        right.add(customerCard, BorderLayout.NORTH);
 
-        right.add(customerPanel, BorderLayout.NORTH);
+        // Booking details card
+        JPanel detailsCard = new JPanel(new GridLayout(0, 1, 12, 12));
+        detailsCard.setBackground(Constants.COLOR_CARD);
+        detailsCard.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 
-        JPanel detailsPanel = new JPanel(new GridLayout(0, 1, 10, 10));
-        detailsPanel.setOpaque(false);
-        detailsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Booking Details", 0, 0, Constants.FONT_SUBHEADER, Constants.COLOR_TEXT));
+        JLabel detailsTitle = new JLabel("Booking Details");
+        detailsTitle.setFont(Constants.FONT_SUBHEADER);
+        detailsTitle.setForeground(Constants.COLOR_TEXT);
+        detailsCard.add(detailsTitle);
 
-        JPanel staffRow = new JPanel(new BorderLayout(5, 0));
+        JPanel staffRow = new JPanel(new BorderLayout(8, 0));
         staffRow.setOpaque(false);
-        staffRow.add(new JLabel("Staff:"), BorderLayout.WEST);
+        JLabel staffLbl = new JLabel("Staff:");
+        staffLbl.setFont(Constants.FONT_BODY);
+        staffLbl.setForeground(Constants.COLOR_TEXT);
+        staffRow.add(staffLbl, BorderLayout.WEST);
         staffCombo = new JComboBox<>();
         staffCombo.setFont(Constants.FONT_BODY);
+        staffCombo.setBackground(Constants.COLOR_CARD_ELEVATED);
         staffRow.add(staffCombo, BorderLayout.CENTER);
-        detailsPanel.add(staffRow);
+        detailsCard.add(staffRow);
 
-        JPanel paymentRow = new JPanel(new BorderLayout(5, 0));
+        JPanel paymentRow = new JPanel(new BorderLayout(8, 0));
         paymentRow.setOpaque(false);
-        paymentRow.add(new JLabel("Payment:"), BorderLayout.WEST);
+        JLabel payLbl = new JLabel("Payment:");
+        payLbl.setFont(Constants.FONT_BODY);
+        payLbl.setForeground(Constants.COLOR_TEXT);
+        paymentRow.add(payLbl, BorderLayout.WEST);
         paymentCombo = new JComboBox<>(Constants.PAYMENT_METHODS);
         paymentCombo.setFont(Constants.FONT_BODY);
+        paymentCombo.setBackground(Constants.COLOR_CARD_ELEVATED);
         paymentRow.add(paymentCombo, BorderLayout.CENTER);
-        detailsPanel.add(paymentRow);
+        detailsCard.add(paymentRow);
 
         totalLabel = new JLabel("Total: $0.00");
-        totalLabel.setFont(Constants.FONT_SUBHEADER);
+        totalLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
         totalLabel.setForeground(Constants.COLOR_PRIMARY);
-        detailsPanel.add(totalLabel);
+        detailsCard.add(totalLabel);
 
-        right.add(detailsPanel, BorderLayout.CENTER);
+        right.add(detailsCard, BorderLayout.CENTER);
 
-        JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        actionPanel.setOpaque(false);
+        // Action area
+        JPanel actionCard = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        actionCard.setBackground(Constants.COLOR_CARD);
+        actionCard.setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
+
+        newCustomerBtn = new JButton("+ New Customer");
+        newCustomerBtn.setFont(Constants.FONT_BODY);
+        newCustomerBtn.setFocusPainted(false);
+        newCustomerBtn.setBackground(Constants.COLOR_CARD_ELEVATED);
+        newCustomerBtn.setForeground(Constants.COLOR_TEXT);
+        newCustomerBtn.addActionListener(e -> openNewCustomerDialog());
+        actionCard.add(newCustomerBtn);
+
         confirmBtn = new JButton("Confirm Booking");
         confirmBtn.setFont(Constants.FONT_SUBHEADER);
-        confirmBtn.setBackground(Constants.COLOR_SUCCESS);
+        confirmBtn.setBackground(Constants.COLOR_PRIMARY);
         confirmBtn.setForeground(Color.WHITE);
         confirmBtn.setFocusPainted(false);
         confirmBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         confirmBtn.addActionListener(e -> confirmBooking());
-        actionPanel.add(confirmBtn);
-        right.add(actionPanel, BorderLayout.SOUTH);
+        actionCard.add(confirmBtn);
+
+        right.add(actionCard, BorderLayout.SOUTH);
 
         split.setRightComponent(right);
         add(split, BorderLayout.CENTER);
 
         refreshData();
+    }
+
+    private JTable createStyledTable(DefaultTableModel model) {
+        JTable table = new JTable(model);
+        table.setFont(Constants.FONT_BODY);
+        table.setRowHeight(40);
+        table.setFillsViewportHeight(true);
+        table.setShowGrid(false);
+        table.setIntercellSpacing(new Dimension(0, 0));
+        table.setSelectionBackground(Constants.COLOR_PRIMARY);
+        table.setSelectionForeground(Color.WHITE);
+        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
+        table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setPreferredSize(new Dimension(0, 40));
+        return table;
     }
 
     @Override
@@ -268,6 +323,7 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
         SwingUtilities.invokeLater(() -> {
             selectedShowLabel.setText(selectedShow.getMovieTitle() + " @ " + selectedShow.getHallName() +
                     " - " + selectedShow.getShowDateTime().format(DateTimeFormatter.ofPattern("MM/dd HH:mm")));
+            selectedShowLabel.setForeground(Constants.COLOR_TEXT);
             seatPanel.clearSelection();
 
             List<String> taken = bookingSeatDao.getTakenSeatNumbersByShow(showId);
@@ -310,7 +366,8 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
         JTextField emailField = new JTextField(20);
         JTextField phoneField = new JTextField(20);
 
-        JPanel panel = new JPanel(new GridLayout(0, 1, 5, 5));
+        JPanel panel = new JPanel(new GridLayout(0, 1, 8, 8));
+        panel.setBackground(Constants.COLOR_CARD);
         panel.add(new JLabel("Full Name:"));
         panel.add(nameField);
         panel.add(new JLabel("Email:"));
@@ -385,6 +442,7 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
             customerListModel.clear();
             totalLabel.setText("Total: $0.00");
             selectedShowLabel.setText("No show selected");
+            selectedShowLabel.setForeground(Constants.COLOR_TEXT_MUTED);
             Container parent = seatPanel.getParent();
             parent.remove(seatPanel);
             seatPanel = new SeatSelectionPanel(0, Collections.emptyList(), s -> {});
@@ -421,9 +479,14 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
         sb.append("\nDate: ").append(b.getBookingDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
         JTextArea area = new JTextArea(sb.toString());
-        area.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        area.setFont(new Font("Consolas", Font.PLAIN, 14));
         area.setEditable(false);
-        area.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        JOptionPane.showMessageDialog(this, new JScrollPane(area), "Booking Confirmed", JOptionPane.INFORMATION_MESSAGE);
+        area.setBackground(Constants.COLOR_CARD);
+        area.setForeground(Constants.COLOR_TEXT);
+        area.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
+        JScrollPane sp = new JScrollPane(area);
+        sp.setBorder(BorderFactory.createEmptyBorder());
+        sp.setPreferredSize(new Dimension(420, 360));
+        JOptionPane.showMessageDialog(this, sp, "Booking Confirmed", JOptionPane.INFORMATION_MESSAGE);
     }
 }

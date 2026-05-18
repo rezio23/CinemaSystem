@@ -14,6 +14,11 @@ public class SeatSelectionPanel extends JPanel {
     private final Set<String> selectedSeats = new HashSet<>();
     private final java.util.function.Consumer<Set<String>> onSelectionChanged;
 
+    // Dark-theme seat colors
+    private static final Color COLOR_AVAILABLE = new Color(0x10B981); // emerald
+    private static final Color COLOR_SELECTED = new Color(0x3B82F6);  // primary blue
+    private static final Color COLOR_TAKEN = new Color(0x475569);     // slate-600
+
     public SeatSelectionPanel(int capacity, List<String> takenSeats,
                                java.util.function.Consumer<Set<String>> onSelectionChanged) {
         this.capacity = capacity;
@@ -24,7 +29,7 @@ public class SeatSelectionPanel extends JPanel {
         int rows = (int) Math.ceil(capacity / (double) cols);
 
         setLayout(new GridLayout(rows, cols, 6, 6));
-        setBackground(Constants.COLOR_BACKGROUND);
+        setBackground(Constants.COLOR_CARD);
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         for (int i = 1; i <= capacity; i++) {
@@ -45,24 +50,25 @@ public class SeatSelectionPanel extends JPanel {
         JButton btn = new JButton(seatNum);
         btn.setFont(Constants.FONT_SMALL);
         btn.setFocusPainted(false);
-        btn.setPreferredSize(new Dimension(55, 45));
+        btn.setPreferredSize(new Dimension(52, 42));
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btn.setBorder(BorderFactory.createEmptyBorder());
 
         if (taken) {
             btn.setEnabled(false);
-            btn.setBackground(new Color(149, 165, 166));
-            btn.setForeground(Color.WHITE);
+            btn.setBackground(COLOR_TAKEN);
+            btn.setForeground(new Color(0x94A3B8));
             btn.setToolTipText("Already booked");
         } else {
-            btn.setBackground(Constants.COLOR_SUCCESS);
+            btn.setBackground(COLOR_AVAILABLE);
             btn.setForeground(Color.WHITE);
             btn.addActionListener(e -> {
                 if (selectedSeats.contains(seatNum)) {
                     selectedSeats.remove(seatNum);
-                    btn.setBackground(Constants.COLOR_SUCCESS);
+                    btn.setBackground(COLOR_AVAILABLE);
                 } else {
                     selectedSeats.add(seatNum);
-                    btn.setBackground(Constants.COLOR_WARNING);
+                    btn.setBackground(COLOR_SELECTED);
                 }
                 onSelectionChanged.accept(selectedSeats);
             });
@@ -78,7 +84,7 @@ public class SeatSelectionPanel extends JPanel {
         selectedSeats.clear();
         for (Component c : getComponents()) {
             if (c instanceof JButton && c.isEnabled()) {
-                c.setBackground(Constants.COLOR_SUCCESS);
+                c.setBackground(COLOR_AVAILABLE);
             }
         }
         onSelectionChanged.accept(selectedSeats);

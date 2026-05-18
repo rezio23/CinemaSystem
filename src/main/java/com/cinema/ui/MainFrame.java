@@ -26,10 +26,11 @@ public class MainFrame extends JFrame {
         JPanel sidebar = createSidebar();
         root.add(sidebar, BorderLayout.WEST);
 
-        // Content area
+        // Content area with subtle rounded card feel
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout);
         contentPanel.setBackground(Constants.COLOR_BACKGROUND);
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         // Panels
         contentPanel.add(new DashboardPanel(), "DASHBOARD");
@@ -50,16 +51,30 @@ public class MainFrame extends JFrame {
     private JPanel createSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-        sidebar.setBackground(Constants.COLOR_PRIMARY);
-        sidebar.setPreferredSize(new Dimension(240, 0));
-        sidebar.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+        sidebar.setBackground(Constants.COLOR_SIDEBAR);
+        sidebar.setPreferredSize(new Dimension(260, 0));
+        sidebar.setBorder(BorderFactory.createEmptyBorder(24, 16, 24, 16));
 
-        JLabel logo = new JLabel("🎬 Cinema System");
-        logo.setFont(Constants.FONT_HEADER);
-        logo.setForeground(Color.WHITE);
-        logo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        logo.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
-        sidebar.add(logo);
+        // Logo area
+        JLabel logoIcon = new JLabel(""); // film icon unicode or simple text
+        logoIcon.setFont(new Font("Segoe UI", Font.PLAIN, 32));
+        logoIcon.setForeground(Constants.COLOR_PRIMARY);
+        logoIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel logoText = new JLabel("Cinema System");
+        logoText.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        logoText.setForeground(Constants.COLOR_TEXT);
+        logoText.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel logoWrap = new JPanel();
+        logoWrap.setLayout(new BoxLayout(logoWrap, BoxLayout.Y_AXIS));
+        logoWrap.setOpaque(false);
+        logoWrap.add(logoIcon);
+        logoWrap.add(Box.createRigidArea(new Dimension(0, 8)));
+        logoWrap.add(logoText);
+        logoWrap.setAlignmentX(Component.CENTER_ALIGNMENT);
+        logoWrap.setBorder(BorderFactory.createEmptyBorder(0, 0, 32, 0));
+        sidebar.add(logoWrap);
 
         addNavButton(sidebar, "Dashboard", "📊", "DASHBOARD");
         addNavButton(sidebar, "Sell Tickets", "🎟", "BOOKING");
@@ -68,13 +83,13 @@ public class MainFrame extends JFrame {
         addNavButton(sidebar, "Staff", "💼", "STAFF");
         addNavButton(sidebar, "Customers", "👥", "CUSTOMERS");
         addNavButton(sidebar, "Shows", "📅", "SHOWS");
-        addNavButton(sidebar, "Reports", "📊", "REPORTS");
+        addNavButton(sidebar, "Reports", "📈", "REPORTS");
 
         sidebar.add(Box.createVerticalGlue());
 
         JLabel footer = new JLabel("v1.0.0 | Final Project");
         footer.setFont(Constants.FONT_SMALL);
-        footer.setForeground(new Color(200, 220, 240));
+        footer.setForeground(Constants.COLOR_TEXT_MUTED);
         footer.setAlignmentX(Component.CENTER_ALIGNMENT);
         sidebar.add(footer);
 
@@ -87,7 +102,7 @@ public class MainFrame extends JFrame {
         btn.addActionListener(e -> switchPanel(name));
         navButtons.put(name, btn);
         sidebar.add(btn);
-        sidebar.add(Box.createRigidArea(new Dimension(0, 8)));
+        sidebar.add(Box.createRigidArea(new Dimension(0, 6)));
     }
 
     private void switchPanel(String name) {
