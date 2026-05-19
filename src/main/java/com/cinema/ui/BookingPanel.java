@@ -145,7 +145,7 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
         JPanel customerSearchRow = new JPanel(new BorderLayout(8, 0));
         customerSearchRow.setOpaque(false);
         customerSearchField = new JTextField(20);
-        customerSearchField.setFont(Constants.FONT_BODY);
+        Constants.styleInput(customerSearchField);
         StyledButton searchCustomerBtn = new StyledButton("Search", StyledButton.Variant.SECONDARY);
         searchCustomerBtn.addActionListener(e -> searchCustomers());
         customerSearchRow.add(customerSearchField, BorderLayout.CENTER);
@@ -181,28 +181,38 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
         detailsTitle.setForeground(Constants.COLOR_TEXT);
         detailsCard.add(detailsTitle);
 
-        JPanel staffRow = new JPanel(new BorderLayout(8, 0));
+        JPanel staffRow = new JPanel(new GridBagLayout());
         staffRow.setOpaque(false);
         JLabel staffLbl = new JLabel("Staff:");
         staffLbl.setFont(Constants.FONT_BODY);
         staffLbl.setForeground(Constants.COLOR_TEXT);
-        staffRow.add(staffLbl, BorderLayout.WEST);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(0, 0, 0, 8);
+        gbc.anchor = GridBagConstraints.WEST;
+        staffRow.add(staffLbl, gbc);
         staffCombo = new JComboBox<>();
-        staffCombo.setFont(Constants.FONT_BODY);
-        staffCombo.setBackground(Constants.COLOR_CARD_ELEVATED);
-        staffRow.add(staffCombo, BorderLayout.CENTER);
+        gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        staffRow.add(Constants.wrapInput(staffCombo), gbc);
         detailsCard.add(staffRow);
 
-        JPanel paymentRow = new JPanel(new BorderLayout(8, 0));
+        JPanel paymentRow = new JPanel(new GridBagLayout());
         paymentRow.setOpaque(false);
         JLabel payLbl = new JLabel("Payment:");
         payLbl.setFont(Constants.FONT_BODY);
         payLbl.setForeground(Constants.COLOR_TEXT);
-        paymentRow.add(payLbl, BorderLayout.WEST);
+        gbc = new GridBagConstraints();
+        gbc.insets = new Insets(0, 0, 0, 8);
+        gbc.anchor = GridBagConstraints.WEST;
+        paymentRow.add(payLbl, gbc);
         paymentCombo = new JComboBox<>(Constants.PAYMENT_METHODS);
-        paymentCombo.setFont(Constants.FONT_BODY);
-        paymentCombo.setBackground(Constants.COLOR_CARD_ELEVATED);
-        paymentRow.add(paymentCombo, BorderLayout.CENTER);
+        gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        paymentRow.add(Constants.wrapInput(paymentCombo), gbc);
         detailsCard.add(paymentRow);
 
         totalLabel = new JLabel("Total: $0.00");
@@ -222,7 +232,6 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
         actionCard.add(newCustomerBtn);
 
         confirmBtn = new StyledButton("Confirm Booking", StyledButton.Variant.PRIMARY);
-        confirmBtn.setFont(Constants.FONT_SUBHEADER);
         confirmBtn.addActionListener(e -> confirmBooking());
         actionCard.add(confirmBtn);
 
@@ -353,6 +362,9 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
         JTextField nameField = new JTextField(20);
         JTextField emailField = new JTextField(20);
         JTextField phoneField = new JTextField(20);
+        Constants.styleInput(nameField);
+        Constants.styleInput(emailField);
+        Constants.styleInput(phoneField);
 
         JPanel panel = new JPanel(new GridLayout(0, 1, 8, 8));
         panel.setBackground(Constants.COLOR_CARD);

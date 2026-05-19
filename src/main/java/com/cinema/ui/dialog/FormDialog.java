@@ -1,5 +1,6 @@
 package com.cinema.ui.dialog;
 
+import com.cinema.ui.components.StyledButton;
 import com.cinema.util.Constants;
 
 import javax.swing.*;
@@ -21,18 +22,13 @@ public class FormDialog extends JDialog {
         formPanel.setOpaque(false);
         add(formPanel, BorderLayout.CENTER);
 
-        JButton saveBtn = new JButton("Save");
-        saveBtn.setFont(Constants.FONT_BODY);
-        saveBtn.setBackground(Constants.COLOR_PRIMARY);
-        saveBtn.setForeground(Color.WHITE);
-        saveBtn.setFocusPainted(false);
+        StyledButton saveBtn = new StyledButton("Save", StyledButton.Variant.PRIMARY);
         saveBtn.addActionListener(e -> {
             confirmed = true;
             dispose();
         });
 
-        JButton cancelBtn = new JButton("Cancel");
-        cancelBtn.setFont(Constants.FONT_BODY);
+        StyledButton cancelBtn = new StyledButton("Cancel", StyledButton.Variant.SECONDARY);
         cancelBtn.addActionListener(e -> dispose());
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
@@ -45,6 +41,13 @@ public class FormDialog extends JDialog {
     }
 
     public void addField(String label, JComponent field) {
+        if (field instanceof JTextField) {
+            Constants.styleInput((JTextField) field);
+        } else if (field instanceof JComboBox<?>) {
+            Constants.styleInput((JComboBox<?>) field);
+        } else if (field instanceof JSpinner) {
+            Constants.styleInput((JSpinner) field);
+        }
         JPanel row = new JPanel(new BorderLayout(8, 0));
         row.setOpaque(false);
         JLabel lbl = new JLabel(label);

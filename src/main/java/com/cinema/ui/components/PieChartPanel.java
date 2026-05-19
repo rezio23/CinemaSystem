@@ -18,10 +18,10 @@ public class PieChartPanel extends JPanel {
     private final Color[] palette;
 
     private static final Color[] DEFAULT_PALETTE = {
-        new Color(0xFF6B00), new Color(0xFF8533), new Color(0xFFB366),
-        new Color(0xCC5500), new Color(0xE67300), new Color(0xFF9933),
-        new Color(0xFFAD5C), new Color(0xFF8000), new Color(0xFFBF80),
-        new Color(0xB34700), new Color(0xD65C00), new Color(0xFFA64D)
+        new Color(0x1A237E), new Color(0x3949AB), new Color(0x5C6BC0),
+        new Color(0x0D1B2A), new Color(0x283593), new Color(0x7986CB),
+        new Color(0x303F9F), new Color(0x1A237E), new Color(0x9FA8DA),
+        new Color(0x3F51B5), new Color(0x536DFE), new Color(0xC5CAE9)
     };
 
     public PieChartPanel(List<Map<String, Object>> data, String labelKey, String valueKey, String title) {
@@ -35,7 +35,8 @@ public class PieChartPanel extends JPanel {
         this.title = title;
         this.palette = palette;
         setBackground(Constants.COLOR_CARD);
-        setPreferredSize(new Dimension(500, 350));
+        setPreferredSize(new Dimension(700, 420));
+        setMinimumSize(new Dimension(500, 350));
     }
 
     @Override

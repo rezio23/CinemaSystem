@@ -23,7 +23,8 @@ public class BarChartPanel extends JPanel {
         this.title = title;
         this.barColor = barColor;
         setBackground(Constants.COLOR_CARD);
-        setPreferredSize(new Dimension(500, 300));
+        setPreferredSize(new Dimension(700, 400));
+        setMinimumSize(new Dimension(500, 300));
     }
 
     @Override

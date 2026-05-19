@@ -10,7 +10,7 @@ public class StyledButton extends JButton {
     public enum Variant { PRIMARY, SUCCESS, DANGER, SECONDARY }
 
     private final Variant variant;
-    private static final int ARC = 8;
+    private static final int ARC = Constants.BORDER_RADIUS;
 
     public StyledButton(String text, Variant variant) {
         super(text);
@@ -21,8 +21,17 @@ public class StyledButton extends JButton {
         setContentAreaFilled(false);
         setOpaque(false);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
-        setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
+        setBorder(BorderFactory.createEmptyBorder(
+            Constants.BUTTON_PADDING.top, Constants.BUTTON_PADDING.left,
+            Constants.BUTTON_PADDING.bottom, Constants.BUTTON_PADDING.right));
         setForeground(foregroundColor());
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        Dimension d = super.getPreferredSize();
+        d.height = Constants.INPUT_HEIGHT;
+        return d;
     }
 
     private Color baseColor() {

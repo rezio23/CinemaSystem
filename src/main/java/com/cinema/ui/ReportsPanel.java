@@ -65,7 +65,7 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
         setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
 
         // ========== NORTH: Header + Filters ==========
-        JPanel north = new JPanel(new BorderLayout(12, 12));
+        JPanel north = new JPanel(new BorderLayout(12, Constants.PAGE_HEADER_GAP));
         north.setOpaque(false);
 
         JLabel header = new JLabel("Reports & Analytics");
@@ -78,8 +78,7 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
 
         String[] views = {"Revenue per Movie", "Daily Revenue", "Weekly Revenue", "Monthly Revenue", "Yearly Revenue", "Occupancy", "Customer History", "Taken Seats"};
         JComboBox<String> viewCombo = new JComboBox<>(views);
-        viewCombo.setFont(Constants.FONT_BODY);
-        viewCombo.setBackground(Constants.COLOR_CARD_ELEVATED);
+        Constants.styleInput(viewCombo);
         viewCombo.addActionListener(e -> switchView((String) viewCombo.getSelectedItem()));
         filterBar.add(new JLabel("Report:"));
         filterBar.add(viewCombo);
@@ -149,14 +148,8 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
         SpinnerDateModel model = new SpinnerDateModel();
         JSpinner spinner = new JSpinner(model);
         spinner.setEditor(new JSpinner.DateEditor(spinner, "yyyy-MM-dd"));
-        spinner.setFont(Constants.FONT_BODY);
-        JComponent editor = spinner.getEditor();
-        if (editor instanceof JSpinner.DefaultEditor) {
-            ((JSpinner.DefaultEditor) editor).getTextField().setBackground(Constants.COLOR_CARD_ELEVATED);
-            ((JSpinner.DefaultEditor) editor).getTextField().setForeground(Constants.COLOR_TEXT);
-            ((JSpinner.DefaultEditor) editor).getTextField().setCaretColor(Constants.COLOR_TEXT);
-        }
-        spinner.setPreferredSize(new Dimension(120, 28));
+        Constants.styleInput(spinner);
+        spinner.setPreferredSize(new Dimension(120, 36));
         return spinner;
     }
 
@@ -334,12 +327,20 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
         JTable table = createStyledTable(revenueMovieModel);
-        JPanel tableCard = wrapInCard(createScroll(table), "Revenue per Movie");
-        panel.add(tableCard, BorderLayout.NORTH);
+        JScrollPane scroll = createScroll(table);
+        scroll.setPreferredSize(new Dimension(0, 200));
+        JPanel tableCard = wrapInCard(scroll, "Revenue per Movie");
 
         revenueMovieChartHolder = new JPanel(new BorderLayout());
         revenueMovieChartHolder.setOpaque(false);
-        panel.add(revenueMovieChartHolder, BorderLayout.CENTER);
+        revenueMovieChartHolder.setPreferredSize(new Dimension(0, 420));
+        JPanel chartCard = wrapInCard(revenueMovieChartHolder, "Chart");
+
+        JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableCard, chartCard);
+        split.setResizeWeight(0.3);
+        split.setOpaque(false);
+        split.setBorder(BorderFactory.createEmptyBorder());
+        panel.add(split, BorderLayout.CENTER);
 
         StyledButton loadBtn = new StyledButton("Load Data", StyledButton.Variant.SECONDARY);
         StyledButton pdfBtn = new StyledButton("Print PDF", StyledButton.Variant.PRIMARY);
@@ -350,7 +351,9 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
                 revenueMovieModel.addRow(new Object[]{row.get("title"), "$" + row.get("totalRevenue"), row.get("ticketsSold")});
             }
             revenueMovieChartHolder.removeAll();
-            revenueMovieChartHolder.add(new PieChartPanel(data, "title", "totalRevenue", "Revenue per Movie"), BorderLayout.CENTER);
+            PieChartPanel chart = new PieChartPanel(data, "title", "totalRevenue", "Revenue per Movie");
+            chart.setMinimumSize(new Dimension(400, 350));
+            revenueMovieChartHolder.add(chart, BorderLayout.CENTER);
             revenueMovieChartHolder.revalidate();
             revenueMovieChartHolder.repaint();
         });
@@ -456,11 +459,20 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
         JTable table = createStyledTable(occupancyModel);
-        panel.add(wrapInCard(createScroll(table), "Occupancy per Show"), BorderLayout.CENTER);
+        JScrollPane scroll = createScroll(table);
+        scroll.setPreferredSize(new Dimension(0, 220));
+        JPanel tableCard = wrapInCard(scroll, "Occupancy per Show");
 
         occupancyChartHolder = new JPanel(new BorderLayout());
         occupancyChartHolder.setOpaque(false);
-        panel.add(occupancyChartHolder, BorderLayout.EAST);
+        occupancyChartHolder.setPreferredSize(new Dimension(0, 420));
+        JPanel chartCard = wrapInCard(occupancyChartHolder, "Chart");
+
+        JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableCard, chartCard);
+        split.setResizeWeight(0.3);
+        split.setOpaque(false);
+        split.setBorder(BorderFactory.createEmptyBorder());
+        panel.add(split, BorderLayout.CENTER);
 
         StyledButton loadBtn = new StyledButton("Load Data", StyledButton.Variant.SECONDARY);
         StyledButton pdfBtn = new StyledButton("Print PDF", StyledButton.Variant.PRIMARY);
@@ -477,7 +489,9 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
                 });
             }
             occupancyChartHolder.removeAll();
-            occupancyChartHolder.add(new BarChartPanel(data, "movieTitle", "occupancyRate", "Occupancy Rate (%)", Constants.COLOR_PRIMARY), BorderLayout.CENTER);
+            BarChartPanel chart = new BarChartPanel(data, "movieTitle", "occupancyRate", "Occupancy Rate (%)", Constants.COLOR_PRIMARY);
+            chart.setMinimumSize(new Dimension(400, 350));
+            occupancyChartHolder.add(chart, BorderLayout.CENTER);
             occupancyChartHolder.revalidate();
             occupancyChartHolder.repaint();
         });
@@ -495,7 +509,7 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
         JPanel top = new JPanel(new BorderLayout(8, 0));
         top.setOpaque(false);
         JTextField custIdField = new JTextField(10);
-        custIdField.setBackground(Constants.COLOR_CARD_ELEVATED);
+        Constants.styleInput(custIdField);
         top.add(new JLabel("Customer ID:"), BorderLayout.WEST);
         top.add(custIdField, BorderLayout.CENTER);
 
@@ -539,7 +553,7 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
         JPanel top = new JPanel(new BorderLayout(8, 0));
         top.setOpaque(false);
         JTextField showIdField = new JTextField(10);
-        showIdField.setBackground(Constants.COLOR_CARD_ELEVATED);
+        Constants.styleInput(showIdField);
         top.add(new JLabel("Show ID:"), BorderLayout.WEST);
         top.add(showIdField, BorderLayout.CENTER);
         StyledButton loadBtn = new StyledButton("Load Seats", StyledButton.Variant.SECONDARY);

@@ -26,7 +26,7 @@ public class BookingsPanel extends JPanel implements MainFrame.Refreshable {
         setBackground(Constants.COLOR_BACKGROUND);
         setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
 
-        JPanel north = new JPanel(new BorderLayout());
+        JPanel north = new JPanel(new BorderLayout(0, Constants.PAGE_HEADER_GAP));
         north.setOpaque(false);
 
         JLabel header = new JLabel("Booking Management");
@@ -149,7 +149,7 @@ public class BookingsPanel extends JPanel implements MainFrame.Refreshable {
 
         JComboBox<String> combo = new JComboBox<>(STATUSES);
         combo.setSelectedItem(currentStatus);
-        combo.setFont(Constants.FONT_BODY);
+        Constants.styleInput(combo);
 
         JPanel panel = new JPanel(new BorderLayout(8, 0));
         panel.setOpaque(false);

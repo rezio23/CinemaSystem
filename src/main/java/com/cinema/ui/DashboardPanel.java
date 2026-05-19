@@ -316,7 +316,7 @@ public class DashboardPanel extends JPanel implements MainFrame.Refreshable {
 
         double[] values = {confirmed, pending, cancelled};
         String[] labels = {"Confirmed", "Pending", "Cancelled"};
-        Color[] colors = {Constants.COLOR_PRIMARY, Constants.COLOR_WARNING, Constants.COLOR_DANGER};
+        Color[] colors = {Constants.COLOR_PRIMARY, Constants.COLOR_PRIMARY_LIGHT, Constants.COLOR_PRIMARY_LIGHTER};
 
         return Map.of(
             "values", values,

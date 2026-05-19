@@ -22,7 +22,7 @@ public class HallPanel extends JPanel implements MainFrame.Refreshable {
         setBackground(Constants.COLOR_BACKGROUND);
         setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
 
-        JPanel north = new JPanel(new BorderLayout());
+        JPanel north = new JPanel(new BorderLayout(0, Constants.PAGE_HEADER_GAP));
         north.setOpaque(false);
 
         JLabel header = new JLabel("Hall Management");

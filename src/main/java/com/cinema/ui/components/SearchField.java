@@ -14,10 +14,7 @@ public class SearchField extends JPanel {
         this.placeholder = placeholder;
         setLayout(new BorderLayout(8, 0));
         setBackground(Constants.COLOR_CARD_ELEVATED);
-        setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(0xD0D9E2), 1, true),
-                BorderFactory.createEmptyBorder(8, 14, 8, 14)
-        ));
+        setBorder(Constants.inputBorder());
 
         field = new JTextField(placeholder);
         field.setFont(Constants.FONT_BODY);
@@ -32,10 +29,7 @@ public class SearchField extends JPanel {
                     field.setText("");
                     field.setForeground(Constants.COLOR_TEXT);
                 }
-                SearchField.this.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(Constants.COLOR_PRIMARY, 1, true),
-                        BorderFactory.createEmptyBorder(8, 14, 8, 14)
-                ));
+                SearchField.this.setBorder(Constants.inputBorderFocused());
             }
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
@@ -43,10 +37,7 @@ public class SearchField extends JPanel {
                     field.setText(placeholder);
                     field.setForeground(Constants.COLOR_TEXT_MUTED);
                 }
-                SearchField.this.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(0xD0D9E2), 1, true),
-                        BorderFactory.createEmptyBorder(8, 14, 8, 14)
-                ));
+                SearchField.this.setBorder(Constants.inputBorder());
             }
         });
 
@@ -73,5 +64,19 @@ public class SearchField extends JPanel {
     public void setText(String text) {
         field.setText(text);
         field.setForeground(text.isEmpty() ? Constants.COLOR_TEXT_MUTED : Constants.COLOR_TEXT);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        Dimension size = super.getPreferredSize();
+        size.height = Constants.INPUT_HEIGHT;
+        return size;
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        Dimension size = super.getMinimumSize();
+        size.height = Constants.INPUT_HEIGHT;
+        return size;
     }
 }
