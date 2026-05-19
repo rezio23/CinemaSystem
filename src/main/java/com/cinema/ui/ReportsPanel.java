@@ -3,6 +3,7 @@ package com.cinema.ui;
 import com.cinema.dao.*;
 import com.cinema.model.MovieShow;
 import com.cinema.ui.components.BarChartPanel;
+import com.cinema.ui.components.PieChartPanel;
 import com.cinema.ui.components.StyledButton;
 import com.cinema.util.Constants;
 import com.lowagie.text.*;
@@ -349,7 +350,7 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
                 revenueMovieModel.addRow(new Object[]{row.get("title"), "$" + row.get("totalRevenue"), row.get("ticketsSold")});
             }
             revenueMovieChartHolder.removeAll();
-            revenueMovieChartHolder.add(new BarChartPanel(data, "title", "totalRevenue", "Revenue per Movie", Constants.COLOR_PRIMARY), BorderLayout.CENTER);
+            revenueMovieChartHolder.add(new PieChartPanel(data, "title", "totalRevenue", "Revenue per Movie"), BorderLayout.CENTER);
             revenueMovieChartHolder.revalidate();
             revenueMovieChartHolder.repaint();
         });

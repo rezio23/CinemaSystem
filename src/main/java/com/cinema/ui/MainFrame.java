@@ -36,6 +36,7 @@ public class MainFrame extends JFrame {
         // Panels
         contentPanel.add(new DashboardPanel(), "DASHBOARD");
         contentPanel.add(new BookingPanel(), "BOOKING");
+        contentPanel.add(new BookingsPanel(), "BOOKINGS");
         contentPanel.add(new MoviePanel(), "MOVIES");
         contentPanel.add(new HallPanel(), "HALLS");
         contentPanel.add(new StaffPanel(), "STAFF");
@@ -79,6 +80,7 @@ public class MainFrame extends JFrame {
 
         addNavButton(sidebar, "Dashboard", SidebarIcon.Type.DASHBOARD, "DASHBOARD");
         addNavButton(sidebar, "Sell Tickets", SidebarIcon.Type.TICKETS, "BOOKING");
+        addNavButton(sidebar, "Bookings", SidebarIcon.Type.BOOKINGS, "BOOKINGS");
         addNavButton(sidebar, "Movies", SidebarIcon.Type.MOVIES, "MOVIES");
         addNavButton(sidebar, "Halls", SidebarIcon.Type.HALLS, "HALLS");
         addNavButton(sidebar, "Staff", SidebarIcon.Type.STAFF, "STAFF");

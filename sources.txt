@@ -17,6 +17,7 @@ src/main/java/com/cinema/model/Staff.java
 src/main/java/com/cinema/service/BookingService.java
 src/main/java/com/cinema/service/CinemaException.java
 src/main/java/com/cinema/ui/BookingPanel.java
+src/main/java/com/cinema/ui/BookingsPanel.java
 src/main/java/com/cinema/ui/components/BarChartPanel.java
 src/main/java/com/cinema/ui/components/CalendarPanel.java
 src/main/java/com/cinema/ui/components/GaugeChart.java
@@ -24,6 +25,7 @@ src/main/java/com/cinema/ui/components/HeatmapPanel.java
 src/main/java/com/cinema/ui/components/IncomeBarChart.java
 src/main/java/com/cinema/ui/components/MiniBarChart.java
 src/main/java/com/cinema/ui/components/MovieShowtimeCard.java
+src/main/java/com/cinema/ui/components/PieChartPanel.java
 src/main/java/com/cinema/ui/components/RoundedPanel.java
 src/main/java/com/cinema/ui/components/SearchField.java
 src/main/java/com/cinema/ui/components/SeatMapPanel.java

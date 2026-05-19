@@ -9,7 +9,7 @@ public class SidebarIcon implements Icon {
     private Color color = Color.WHITE;
 
     public enum Type {
-        DASHBOARD, TICKETS, MOVIES, HALLS, STAFF, CUSTOMERS, SHOWS, REPORTS
+        DASHBOARD, TICKETS, MOVIES, HALLS, STAFF, CUSTOMERS, SHOWS, REPORTS, BOOKINGS
     }
 
     public SidebarIcon(Type type) {
@@ -46,6 +46,7 @@ public class SidebarIcon implements Icon {
             case CUSTOMERS -> paintCustomers(g2);
             case SHOWS -> paintShows(g2);
             case REPORTS -> paintReports(g2);
+            case BOOKINGS -> paintBookings(g2);
         }
         g2.dispose();
     }
@@ -141,5 +142,13 @@ public class SidebarIcon implements Icon {
         g2.fillRoundRect(2, 11, 4, 9, 2, 2);
         g2.fillRoundRect(8, 6, 4, 14, 2, 2);
         g2.fillRoundRect(14, 9, 4, 11, 2, 2);
+    }
+
+    // Clipboard with lines representing a list
+    private void paintBookings(Graphics2D g2) {
+        g2.fillRoundRect(4, 2, 12, 3, 1, 1);
+        g2.fillRoundRect(2, 5, 16, 13, 2, 2);
+        g2.fillRect(6, 9, 8, 2);
+        g2.fillRect(6, 13, 6, 2);
     }
 }

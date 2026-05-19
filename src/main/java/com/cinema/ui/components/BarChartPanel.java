@@ -5,6 +5,7 @@ import com.cinema.util.Constants;
 import javax.swing.*;
 import java.awt.*;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ public class BarChartPanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 
         int padding = 40;
         int top = 40;
@@ -66,6 +68,9 @@ public class BarChartPanel extends JPanel {
         int barWidth = Math.max(10, chartWidth / data.size() - 10);
         int gap = 10;
 
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMaximumFractionDigits(0);
+
         for (int i = 0; i < data.size(); i++) {
             Map<String, Object> row = data.get(i);
             String label = String.valueOf(row.get(labelKey));
@@ -78,22 +83,59 @@ public class BarChartPanel extends JPanel {
             int x = left + i * (barWidth + gap) + gap / 2;
             int y = getHeight() - bottom - barHeight;
 
+            // Bar shadow for depth
+            g2.setColor(new Color(0, 0, 0, 20));
+            g2.fillRoundRect(x + 2, y + 2, barWidth, barHeight, 4, 4);
+
+            // Bar
             g2.setColor(barColor);
             g2.fillRoundRect(x, y, barWidth, barHeight, 4, 4);
             g2.setColor(barColor.darker());
             g2.drawRoundRect(x, y, barWidth, barHeight, 4, 4);
 
             // Value label on top
+            String valueStr = nf.format(value);
             g2.setFont(Constants.FONT_SMALL);
+            FontMetrics vfm = g2.getFontMetrics();
+            int vw = vfm.stringWidth(valueStr);
+            int vh = vfm.getHeight();
+            int vx = x + (barWidth - vw) / 2;
+            int vy = y - 8;
+
+            // Ensure label stays within chart bounds
+            if (vy < top + vh) {
+                vy = y + barHeight + vh;
+            }
+
+            // Draw contrasting background pill behind value
+            int pillPadX = 4;
+            int pillPadY = 2;
+            int pillX = vx - pillPadX;
+            int pillY = vy - vfm.getAscent() - pillPadY;
+            int pillW = vw + pillPadX * 2;
+            int pillH = vh + pillPadY * 2;
+            g2.setColor(new Color(255, 255, 255, 220));
+            g2.fillRoundRect(pillX, pillY, pillW, pillH, 6, 6);
             g2.setColor(Constants.COLOR_TEXT);
-            String valueStr = String.format("%.0f", value);
-            int vw = g2.getFontMetrics().stringWidth(valueStr);
-            g2.drawString(valueStr, x + (barWidth - vw) / 2, y - 5);
+            g2.drawString(valueStr, vx, vy);
 
             // X label
             g2.setColor(Constants.COLOR_TEXT);
             int lw = g2.getFontMetrics().stringWidth(label);
-            g2.drawString(label, x + (barWidth - lw) / 2, getHeight() - bottom + 20);
+            int lx = x + (barWidth - lw) / 2;
+            int ly = getHeight() - bottom + 20;
+
+            // Truncate long labels and add ellipsis
+            String displayLabel = label;
+            if (lw > barWidth + gap) {
+                while (g2.getFontMetrics().stringWidth(displayLabel + "...") > barWidth + gap && displayLabel.length() > 0) {
+                    displayLabel = displayLabel.substring(0, displayLabel.length() - 1);
+                }
+                displayLabel += "...";
+                lw = g2.getFontMetrics().stringWidth(displayLabel);
+                lx = x + (barWidth - lw) / 2;
+            }
+            g2.drawString(displayLabel, lx, ly);
         }
 
         // Y axis line
@@ -101,14 +143,21 @@ public class BarChartPanel extends JPanel {
         g2.drawLine(left, top, left, getHeight() - bottom);
         g2.drawLine(left, getHeight() - bottom, getWidth() - right, getHeight() - bottom);
 
-        // Y ticks
+        // Y ticks with proper number formatting
         g2.setFont(Constants.FONT_SMALL);
         for (int i = 0; i <= 5; i++) {
             double val = maxValue * i / 5.0;
-            int y = getHeight() - bottom - (int) ((val / maxValue) * chartHeight);
-            String tick = String.format("%.0f", val);
+            int yTick = getHeight() - bottom - (int) ((val / maxValue) * chartHeight);
+            String tick = nf.format(val);
             int tw = g2.getFontMetrics().stringWidth(tick);
-            g2.drawString(tick, left - tw - 5, y + 4);
+            g2.drawString(tick, left - tw - 8, yTick + 4);
+
+            // Light grid line
+            if (i > 0) {
+                g2.setColor(new Color(0xE0E6ED));
+                g2.drawLine(left + 1, yTick, getWidth() - right, yTick);
+                g2.setColor(Constants.COLOR_TEXT_MUTED);
+            }
         }
     }
 }

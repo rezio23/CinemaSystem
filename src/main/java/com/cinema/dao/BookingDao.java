@@ -94,7 +94,7 @@ public class BookingDao {
 
     public int insert(Connection conn, Booking b) throws SQLException {
         String sql = "INSERT INTO BOOKING (customer_id, show_id, staff_id, booking_date, payment_method, total_amount, status) " +
-                     "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, 'CONFIRMED')";
+                     "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?, 'PENDING')";
         try (PreparedStatement ps = conn.prepareStatement(sql, new String[]{"booking_id"})) {
             ps.setInt(1, b.getCustomerId());
             ps.setInt(2, b.getShowId());
