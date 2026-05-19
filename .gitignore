@@ -52,6 +52,9 @@ desktop.ini
 app_log.txt
 run_*.txt
 
+# --- Environment variables ---
+.env
+
 # --- Database credentials ---
 # Copy db.properties.example to db.properties and fill in your credentials
 db.properties

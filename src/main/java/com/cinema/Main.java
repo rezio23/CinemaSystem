@@ -1,6 +1,7 @@
 package com.cinema;
 
 import com.cinema.ui.MainFrame;
+import com.cinema.util.DatabaseSetup;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
@@ -96,6 +97,9 @@ public class Main {
         }
 
         SwingUtilities.invokeLater(() -> {
+            if (!DatabaseSetup.checkAndSetup(null)) {
+                System.exit(1);
+            }
             MainFrame frame = new MainFrame();
             frame.setVisible(true);
         });

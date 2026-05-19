@@ -51,23 +51,31 @@ A desktop application for managing a cinema, built with **Java Swing** and **Ora
 ├── drop_tables.sql                  # DROP TABLE statements
 ├── queries.sql                      # Reporting queries
 ├── pom.xml                          # Maven configuration
-└── run.bat                          # Quick run script (Windows)
+├── run.bat                          # Quick run script (Windows)
+├── .env.example                     # Database config template (copy to .env)
+└── .env                             # Your real credentials (ignored by Git)
 ```
 
 ## Setup Instructions
 
 ### 1. Configure the Database
 
-1. Copy `src/main/resources/db.properties.example` to `src/main/resources/db.properties`:
-   ```bash
-   copy src\main\resources\db.properties.example src\main\resources\db.properties
-   ```
-2. Edit `db.properties` with your Oracle credentials:
-   ```properties
-   jdbc.url=jdbc:oracle:thin:@localhost:1521/ORCL
-   jdbc.username=your_username
-   jdbc.password=your_password
-   ```
+Create a `.env` file in the **project root** (next to `pom.xml`) and add your Oracle credentials:
+
+```bash
+copy .env.example .env
+```
+
+Edit `.env` with your credentials:
+```properties
+DB_URL=jdbc:oracle:thin:@localhost:1521/ORCL
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+> **Security note:** `.env` is listed in `.gitignore` and will never be committed to Git.
+>
+> As a fallback, the app also reads from `src/main/resources/db.properties`, but `.env` is recommended because it stays outside the compiled JAR.
 
 ### 2. Create Database Tables
 
