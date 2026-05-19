@@ -18,15 +18,15 @@ public final class Constants {
     // ============================================================
 
     // Backgrounds
-    public static final Color COLOR_BACKGROUND = new Color(0x1A1A1A);
-    public static final Color COLOR_SIDEBAR = new Color(0x151515);
-    public static final Color COLOR_CARD = new Color(0x282828);
-    public static final Color COLOR_CARD_ELEVATED = new Color(0x323232);
+    public static final Color COLOR_BACKGROUND = new Color(0xF5F7FA);
+    public static final Color COLOR_SIDEBAR = new Color(0xFFFFFF);
+    public static final Color COLOR_CARD = new Color(0xFFFFFF);
+    public static final Color COLOR_CARD_ELEVATED = new Color(0xE8EDF2);
 
     // Accent
-    public static final Color COLOR_PRIMARY = new Color(0xFF6B00);        // vibrant orange
-    public static final Color COLOR_PRIMARY_LIGHT = new Color(0xFF8533);
-    public static final Color COLOR_PRIMARY_DARK = new Color(0xCC5500);
+    public static final Color COLOR_PRIMARY = new Color(0x1A237E);        // navy
+    public static final Color COLOR_PRIMARY_LIGHT = new Color(0x3949AB);
+    public static final Color COLOR_PRIMARY_DARK = new Color(0x0D1B2A);
 
     // Semantic
     public static final Color COLOR_SUCCESS = new Color(0x22C55E);
@@ -34,18 +34,18 @@ public final class Constants {
     public static final Color COLOR_WARNING = new Color(0xF59E0B);
 
     // Text
-    public static final Color COLOR_TEXT = new Color(0xFFFFFF);
-    public static final Color COLOR_TEXT_MUTED = new Color(0xA0A0A0);
-    public static final Color COLOR_TEXT_SECONDARY = new Color(0x666666);
+    public static final Color COLOR_TEXT = new Color(0x0D1B2A);
+    public static final Color COLOR_TEXT_MUTED = new Color(0x546E7A);
+    public static final Color COLOR_TEXT_SECONDARY = new Color(0x78909C);
 
     // Charts / Data visualization
-    public static final Color COLOR_CHART_TRACK = new Color(0x3A3A3A);
-    public static final Color COLOR_CHART_BAR_BASE = new Color(0x3A3A3A);
-    public static final Color COLOR_CHART_BAR_FILL = new Color(0xFF6B00);
-    public static final Color COLOR_SEAT_AVAILABLE = new Color(0x4A4A4A);
-    public static final Color COLOR_SEAT_BOOKED = new Color(0x1A1A1A);
-    public static final Color COLOR_HEATMAP_LOW = new Color(0x3A2515);
-    public static final Color COLOR_HEATMAP_HIGH = new Color(0xFF6B00);
+    public static final Color COLOR_CHART_TRACK = new Color(0xE0E6ED);
+    public static final Color COLOR_CHART_BAR_BASE = new Color(0xE0E6ED);
+    public static final Color COLOR_CHART_BAR_FILL = new Color(0x1A237E);
+    public static final Color COLOR_SEAT_AVAILABLE = new Color(0xE0E6ED);
+    public static final Color COLOR_SEAT_BOOKED = new Color(0x0D1B2A);
+    public static final Color COLOR_HEATMAP_LOW = new Color(0xE8EDF2);
+    public static final Color COLOR_HEATMAP_HIGH = new Color(0x1A237E);
 
     // Shadows / borders
     public static final Color COLOR_SHADOW = new Color(0x000000);

@@ -73,15 +73,13 @@ public class SidebarButton extends JButton {
         int h = getHeight();
 
         if (active) {
-            g2.setColor(Constants.COLOR_CARD);
-            g2.fill(new RoundRectangle2D.Float(0, 0, w, h, 8, 8));
             g2.setColor(Constants.COLOR_PRIMARY);
+            g2.fill(new RoundRectangle2D.Float(0, 0, w, h, 8, 8));
+            g2.setColor(Color.WHITE);
             g2.fillRect(0, 8, 4, h - 16);
         } else if (getModel().isRollover()) {
-            g2.setColor(new Color(0xFFFFFF));
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.06f));
+            g2.setColor(new Color(0xE8EDF2));
             g2.fill(new RoundRectangle2D.Float(0, 0, w, h, 8, 8));
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
             setForeground(Constants.COLOR_TEXT);
         } else {
             setForeground(Constants.COLOR_TEXT_MUTED);

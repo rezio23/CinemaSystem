@@ -79,7 +79,7 @@ public class SimpleLineChart extends JPanel {
         fill.lineTo(padLeft + (values.length - 1) * step, padTop + chartH);
         fill.lineTo(padLeft, padTop + chartH);
         fill.closePath();
-        g2.setColor(new Color(0xFF6B00));
+        g2.setColor(Constants.COLOR_PRIMARY);
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.15f));
         g2.fill(fill);
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));

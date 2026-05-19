@@ -14,10 +14,10 @@ public class SeatSelectionPanel extends JPanel {
     private final Set<String> selectedSeats = new HashSet<>();
     private final java.util.function.Consumer<Set<String>> onSelectionChanged;
 
-    // Dark-theme seat colors
-    private static final Color COLOR_AVAILABLE = new Color(0x10B981); // emerald
-    private static final Color COLOR_SELECTED = new Color(0x3B82F6);  // primary blue
-    private static final Color COLOR_TAKEN = new Color(0x475569);     // slate-600
+    // Light-theme seat colors
+    private static final Color COLOR_AVAILABLE = new Color(0xE0E6ED);
+    private static final Color COLOR_SELECTED = new Color(0x1A237E);
+    private static final Color COLOR_TAKEN = new Color(0x0D1B2A);
 
     public SeatSelectionPanel(int capacity, List<String> takenSeats,
                                java.util.function.Consumer<Set<String>> onSelectionChanged) {
@@ -57,18 +57,20 @@ public class SeatSelectionPanel extends JPanel {
         if (taken) {
             btn.setEnabled(false);
             btn.setBackground(COLOR_TAKEN);
-            btn.setForeground(new Color(0x94A3B8));
+            btn.setForeground(new Color(0x78909C));
             btn.setToolTipText("Already booked");
         } else {
             btn.setBackground(COLOR_AVAILABLE);
-            btn.setForeground(Color.WHITE);
+            btn.setForeground(Constants.COLOR_TEXT);
             btn.addActionListener(e -> {
                 if (selectedSeats.contains(seatNum)) {
                     selectedSeats.remove(seatNum);
                     btn.setBackground(COLOR_AVAILABLE);
+                    btn.setForeground(Constants.COLOR_TEXT);
                 } else {
                     selectedSeats.add(seatNum);
                     btn.setBackground(COLOR_SELECTED);
+                    btn.setForeground(Color.WHITE);
                 }
                 onSelectionChanged.accept(selectedSeats);
             });
@@ -85,6 +87,7 @@ public class SeatSelectionPanel extends JPanel {
         for (Component c : getComponents()) {
             if (c instanceof JButton && c.isEnabled()) {
                 c.setBackground(COLOR_AVAILABLE);
+                ((JButton) c).setForeground(Constants.COLOR_TEXT);
             }
         }
         onSelectionChanged.accept(selectedSeats);

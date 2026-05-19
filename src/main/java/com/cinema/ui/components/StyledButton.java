@@ -46,7 +46,7 @@ public class StyledButton extends JButton {
             case PRIMARY -> Constants.COLOR_PRIMARY_LIGHT;
             case SUCCESS -> new Color(0x34D399);
             case DANGER -> new Color(0xF87171);
-            case SECONDARY -> new Color(0x3A3A3A);
+            case SECONDARY -> new Color(0xD0D9E2);
         };
     }
 
@@ -55,7 +55,7 @@ public class StyledButton extends JButton {
             case PRIMARY -> Constants.COLOR_PRIMARY_DARK;
             case SUCCESS -> new Color(0x16A34A);
             case DANGER -> new Color(0xDC2626);
-            case SECONDARY -> Constants.COLOR_CARD;
+            case SECONDARY -> new Color(0xC0C9D2);
         };
     }
 

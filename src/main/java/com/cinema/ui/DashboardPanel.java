@@ -60,7 +60,7 @@ public class DashboardPanel extends JPanel implements MainFrame.Refreshable {
         statsRow.add(wrapStatCard("Revenue Today", statRevenue, Constants.COLOR_WARNING, ""));
 
         statOccupancy = createStatLabel("0%");
-        statsRow.add(wrapStatCard("Occupancy", statOccupancy, new Color(0x8B5CF6), ""));
+        statsRow.add(wrapStatCard("Occupancy", statOccupancy, Constants.COLOR_PRIMARY, ""));
 
         content.add(statsRow, BorderLayout.NORTH);
 
@@ -172,7 +172,7 @@ public class DashboardPanel extends JPanel implements MainFrame.Refreshable {
         table.setIntercellSpacing(new Dimension(0, 0));
         table.setFillsViewportHeight(true);
         table.setSelectionBackground(Constants.COLOR_PRIMARY);
-        table.setSelectionForeground(Color.WHITE);
+        table.setSelectionForeground(Constants.COLOR_TEXT);
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
         table.getTableHeader().setBackground(Constants.COLOR_CARD);
         table.getTableHeader().setForeground(Constants.COLOR_TEXT_MUTED);
