@@ -5,11 +5,11 @@ import com.cinema.model.MovieShow;
 import com.cinema.ui.components.BarChartPanel;
 import com.cinema.ui.components.PieChartPanel;
 import com.cinema.ui.components.StyledButton;
+import com.cinema.ui.dialog.AppDialog;
 import com.cinema.util.Constants;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.*;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -102,13 +102,14 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
         filterBar.add(toSpinner);
 
         StyledButton todayBtn = new StyledButton("Today", StyledButton.Variant.SECONDARY);
-        todayBtn.addActionListener(e -> setPreset("day"));
         StyledButton weekBtn = new StyledButton("This Week", StyledButton.Variant.SECONDARY);
-        weekBtn.addActionListener(e -> setPreset("week"));
         StyledButton monthBtn = new StyledButton("This Month", StyledButton.Variant.SECONDARY);
-        monthBtn.addActionListener(e -> setPreset("month"));
         StyledButton yearBtn = new StyledButton("This Year", StyledButton.Variant.SECONDARY);
-        yearBtn.addActionListener(e -> setPreset("year"));
+        todayBtn.setActive(true);
+        todayBtn.addActionListener(e -> setPreset("day", todayBtn, weekBtn, monthBtn, yearBtn));
+        weekBtn.addActionListener(e -> setPreset("week", weekBtn, todayBtn, monthBtn, yearBtn));
+        monthBtn.addActionListener(e -> setPreset("month", monthBtn, todayBtn, weekBtn, yearBtn));
+        yearBtn.addActionListener(e -> setPreset("year", yearBtn, todayBtn, weekBtn, monthBtn));
 
         filterBar.add(todayBtn);
         filterBar.add(weekBtn);
@@ -162,7 +163,12 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
         spinner.setValue(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()));
     }
 
-    private void setPreset(String preset) {
+    private void setPreset(String preset, StyledButton active, StyledButton... others) {
+        active.setActive(true);
+        for (StyledButton button : others) {
+            button.setActive(false);
+        }
+
         LocalDate today = LocalDate.now();
         switch (preset) {
             case "day" -> {
@@ -260,9 +266,9 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
             }
             doc.add(table);
             doc.close();
-            JOptionPane.showMessageDialog(this, "PDF saved to:\n" + file.getAbsolutePath(), "PDF Exported", JOptionPane.INFORMATION_MESSAGE);
+            AppDialog.showMessage(this, "PDF saved to:\n" + file.getAbsolutePath(), "PDF Exported", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Failed to export PDF: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            AppDialog.showMessage(this, "Failed to export PDF: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -535,7 +541,7 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
                     });
                 }
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(panel, "Enter a valid Customer ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(panel, "Enter a valid Customer ID.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         pdfBtn.addActionListener(e -> printPdf("Customer History",
@@ -569,7 +575,7 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
                 int showId = Integer.parseInt(showIdField.getText().trim());
                 MovieShow show = showDao.getById(showId);
                 if (show == null) {
-                    JOptionPane.showMessageDialog(panel, "Show not found.", "Error", JOptionPane.ERROR_MESSAGE);
+                    AppDialog.showMessage(panel, "Show not found.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 java.util.List<String> taken = bookingSeatDao.getTakenSeatNumbersByShow(showId);
@@ -579,7 +585,7 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
                 seatArea.revalidate();
                 seatArea.repaint();
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(panel, "Enter a valid Show ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(panel, "Enter a valid Show ID.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         return panel;

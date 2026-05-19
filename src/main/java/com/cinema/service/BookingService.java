@@ -6,7 +6,6 @@ import com.cinema.model.Booking;
 import com.cinema.model.BookingSeat;
 import com.cinema.util.DBConnection;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;

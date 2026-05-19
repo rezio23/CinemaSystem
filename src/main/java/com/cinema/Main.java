@@ -92,8 +92,7 @@ public class Main {
             UIManager.put("MenuItem.selectionBackground", new Color(0x1A237E));
             UIManager.put("MenuItem.selectionForeground", Color.WHITE);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
 
         SwingUtilities.invokeLater(() -> {

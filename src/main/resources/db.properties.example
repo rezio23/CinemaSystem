@@ -1,0 +1,6 @@
+# Oracle Database Configuration
+# Copy this file to db.properties and fill in your actual credentials
+
+jdbc.url=jdbc:oracle:thin:@localhost:1521/ORCL
+jdbc.username=your_username
+jdbc.password=your_password

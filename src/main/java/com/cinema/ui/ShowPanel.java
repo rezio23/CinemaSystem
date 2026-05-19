@@ -6,6 +6,7 @@ import com.cinema.dao.MovieShowDao;
 import com.cinema.model.Hall;
 import com.cinema.model.Movie;
 import com.cinema.model.MovieShow;
+import com.cinema.ui.dialog.AppDialog;
 import com.cinema.ui.dialog.FormDialog;
 import com.cinema.util.Constants;
 
@@ -95,14 +96,14 @@ public class ShowPanel extends JPanel implements MainFrame.Refreshable {
                 Movie movie = movieDao.getById(s.getMovieId());
                 int duration = movie != null && movie.getDurationMin() > 0 ? movie.getDurationMin() : 150;
                 if (showDao.hasOverlap(s.getHallId(), s.getShowDateTime(), s.getShowDateTime().plusMinutes(duration), null)) {
-                    JOptionPane.showMessageDialog(this, "There is already a show in this hall around that time.", "Overlap", JOptionPane.WARNING_MESSAGE);
+                    AppDialog.showMessage(this, "There is already a show in this hall around that time.", "Overlap", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
                 showDao.insert(s);
                 refreshData();
-                JOptionPane.showMessageDialog(this, "Show added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AppDialog.showMessage(this, "Show added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -119,14 +120,14 @@ public class ShowPanel extends JPanel implements MainFrame.Refreshable {
                 Movie movie = movieDao.getById(updated.getMovieId());
                 int duration = movie != null && movie.getDurationMin() > 0 ? movie.getDurationMin() : 150;
                 if (showDao.hasOverlap(updated.getHallId(), updated.getShowDateTime(), updated.getShowDateTime().plusMinutes(duration), id)) {
-                    JOptionPane.showMessageDialog(this, "There is already a show in this hall around that time.", "Overlap", JOptionPane.WARNING_MESSAGE);
+                    AppDialog.showMessage(this, "There is already a show in this hall around that time.", "Overlap", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
                 showDao.update(updated);
                 refreshData();
-                JOptionPane.showMessageDialog(this, "Show updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AppDialog.showMessage(this, "Show updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -135,14 +136,14 @@ public class ShowPanel extends JPanel implements MainFrame.Refreshable {
         int row = table.getSelectedRow();
         if (row < 0) return;
         int id = (int) model.getValueAt(row, 0);
-        int confirm = JOptionPane.showConfirmDialog(this, "Delete this show?", "Confirm", JOptionPane.YES_NO_OPTION);
+        int confirm = AppDialog.showConfirm(this, "Delete this show?", "Confirm", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
                 showDao.delete(id);
                 refreshData();
-                JOptionPane.showMessageDialog(this, "Show deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AppDialog.showMessage(this, "Show deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -193,7 +194,7 @@ public class ShowPanel extends JPanel implements MainFrame.Refreshable {
                 show.setBasePrice(new BigDecimal(price.getText().trim()));
                 return show;
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Invalid date or price format. Use yyyy-MM-dd HH:mm", "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Invalid date or price format. Use yyyy-MM-dd HH:mm", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         return null;

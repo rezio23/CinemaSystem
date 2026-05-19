@@ -3,6 +3,7 @@ package com.cinema.ui;
 import com.cinema.dao.HallDao;
 import com.cinema.model.Hall;
 import com.cinema.ui.components.StyledButton;
+import com.cinema.ui.dialog.AppDialog;
 import com.cinema.ui.dialog.FormDialog;
 import com.cinema.util.Constants;
 
@@ -80,9 +81,9 @@ public class HallPanel extends JPanel implements MainFrame.Refreshable {
             try {
                 dao.insert(h);
                 refreshData();
-                JOptionPane.showMessageDialog(this, "Hall added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AppDialog.showMessage(this, "Hall added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -98,9 +99,9 @@ public class HallPanel extends JPanel implements MainFrame.Refreshable {
                 updated.setHallId(id);
                 dao.update(updated);
                 refreshData();
-                JOptionPane.showMessageDialog(this, "Hall updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AppDialog.showMessage(this, "Hall updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -109,14 +110,14 @@ public class HallPanel extends JPanel implements MainFrame.Refreshable {
         int row = table.getSelectedRow();
         if (row < 0) return;
         int id = (int) model.getValueAt(row, 0);
-        int confirm = JOptionPane.showConfirmDialog(this, "Delete this hall?", "Confirm", JOptionPane.YES_NO_OPTION);
+        int confirm = AppDialog.showConfirm(this, "Delete this hall?", "Confirm", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
                 dao.delete(id);
                 refreshData();
-                JOptionPane.showMessageDialog(this, "Hall deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AppDialog.showMessage(this, "Hall deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -140,7 +141,7 @@ public class HallPanel extends JPanel implements MainFrame.Refreshable {
                 hall.setHallType(type.getText().trim());
                 return hall;
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Invalid capacity.", "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Invalid capacity.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         return null;

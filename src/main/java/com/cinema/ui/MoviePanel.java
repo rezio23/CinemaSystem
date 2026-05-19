@@ -4,6 +4,7 @@ import com.cinema.dao.MovieDao;
 import com.cinema.model.Movie;
 import com.cinema.ui.components.SearchField;
 import com.cinema.ui.components.StyledButton;
+import com.cinema.ui.dialog.AppDialog;
 import com.cinema.ui.dialog.FormDialog;
 import com.cinema.util.Constants;
 
@@ -102,9 +103,9 @@ public class MoviePanel extends JPanel implements MainFrame.Refreshable {
             try {
                 dao.insert(m);
                 refreshData();
-                JOptionPane.showMessageDialog(this, "Movie added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AppDialog.showMessage(this, "Movie added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -120,9 +121,9 @@ public class MoviePanel extends JPanel implements MainFrame.Refreshable {
                 updated.setMovieId(id);
                 dao.update(updated);
                 refreshData();
-                JOptionPane.showMessageDialog(this, "Movie updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AppDialog.showMessage(this, "Movie updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -131,14 +132,14 @@ public class MoviePanel extends JPanel implements MainFrame.Refreshable {
         int row = table.getSelectedRow();
         if (row < 0) return;
         int id = (int) model.getValueAt(row, 0);
-        int confirm = JOptionPane.showConfirmDialog(this, "Delete this movie?", "Confirm", JOptionPane.YES_NO_OPTION);
+        int confirm = AppDialog.showConfirm(this, "Delete this movie?", "Confirm", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
                 dao.delete(id);
                 refreshData();
-                JOptionPane.showMessageDialog(this, "Movie deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AppDialog.showMessage(this, "Movie deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -171,7 +172,7 @@ public class MoviePanel extends JPanel implements MainFrame.Refreshable {
                 movie.setReleaseYear(Integer.parseInt(year.getText().trim()));
                 return movie;
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Invalid number format.", "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Invalid number format.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         return null;

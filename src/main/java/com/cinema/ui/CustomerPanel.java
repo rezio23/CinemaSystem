@@ -5,6 +5,7 @@ import com.cinema.dao.ReportDao;
 import com.cinema.model.Customer;
 import com.cinema.ui.components.SearchField;
 import com.cinema.ui.components.StyledButton;
+import com.cinema.ui.dialog.AppDialog;
 import com.cinema.ui.dialog.FormDialog;
 import com.cinema.util.Constants;
 
@@ -114,9 +115,9 @@ public class CustomerPanel extends JPanel implements MainFrame.Refreshable {
             try {
                 dao.insert(c);
                 refreshData();
-                JOptionPane.showMessageDialog(this, "Customer added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AppDialog.showMessage(this, "Customer added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -132,9 +133,9 @@ public class CustomerPanel extends JPanel implements MainFrame.Refreshable {
                 updated.setCustomerId(id);
                 dao.update(updated);
                 refreshData();
-                JOptionPane.showMessageDialog(this, "Customer updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AppDialog.showMessage(this, "Customer updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -143,14 +144,14 @@ public class CustomerPanel extends JPanel implements MainFrame.Refreshable {
         int row = table.getSelectedRow();
         if (row < 0) return;
         int id = (int) model.getValueAt(row, 0);
-        int confirm = JOptionPane.showConfirmDialog(this, "Delete this customer?", "Confirm", JOptionPane.YES_NO_OPTION);
+        int confirm = AppDialog.showConfirm(this, "Delete this customer?", "Confirm", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
                 dao.delete(id);
                 refreshData();
-                JOptionPane.showMessageDialog(this, "Customer deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AppDialog.showMessage(this, "Customer deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -182,7 +183,7 @@ public class CustomerPanel extends JPanel implements MainFrame.Refreshable {
         JScrollPane scroll = new JScrollPane(histTable);
         scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setPreferredSize(new Dimension(800, 300));
-        JOptionPane.showMessageDialog(this, scroll, "Customer Booking History", JOptionPane.INFORMATION_MESSAGE);
+        AppDialog.showContent(this, scroll, "Customer Booking History", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private Customer showForm(Customer c) {

@@ -1,7 +1,6 @@
 package com.cinema.ui.components;
 
 import com.cinema.util.Constants;
-import com.formdev.flatlaf.FlatClientProperties;
 
 import javax.swing.*;
 import java.awt.*;

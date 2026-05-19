@@ -3,6 +3,7 @@ package com.cinema.ui;
 import com.cinema.dao.BookingDao;
 import com.cinema.model.Booking;
 import com.cinema.ui.components.StyledButton;
+import com.cinema.ui.dialog.AppDialog;
 import com.cinema.util.Constants;
 
 import javax.swing.*;
@@ -41,10 +42,11 @@ public class BookingsPanel extends JPanel implements MainFrame.Refreshable {
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         filterPanel.setOpaque(false);
 
-        StyledButton allBtn = new StyledButton("All", StyledButton.Variant.PRIMARY);
+        StyledButton allBtn = new StyledButton("All", StyledButton.Variant.SECONDARY);
         StyledButton pendingBtn = new StyledButton("Pending", StyledButton.Variant.SECONDARY);
         StyledButton confirmedBtn = new StyledButton("Confirmed", StyledButton.Variant.SECONDARY);
         StyledButton cancelledBtn = new StyledButton("Cancelled", StyledButton.Variant.SECONDARY);
+        allBtn.setActive(true);
 
         allBtn.addActionListener(e -> applyFilter("ALL", allBtn, pendingBtn, confirmedBtn, cancelledBtn));
         pendingBtn.addActionListener(e -> applyFilter("PENDING", pendingBtn, allBtn, confirmedBtn, cancelledBtn));
@@ -99,8 +101,10 @@ public class BookingsPanel extends JPanel implements MainFrame.Refreshable {
 
     private void applyFilter(String status, StyledButton active, StyledButton... others) {
         currentFilter = status;
-        // Visual feedback: active = PRIMARY, others = SECONDARY
-        // Re-create buttons is easier than managing state, but let's just reload
+        active.setActive(true);
+        for (StyledButton button : others) {
+            button.setActive(false);
+        }
         refreshData();
     }
 
@@ -141,7 +145,7 @@ public class BookingsPanel extends JPanel implements MainFrame.Refreshable {
     private void changeStatus() {
         int row = table.getSelectedRow();
         if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Please select a booking.", "Error", JOptionPane.ERROR_MESSAGE);
+            AppDialog.showMessage(this, "Please select a booking.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         int bookingId = (int) model.getValueAt(row, 0);
@@ -156,20 +160,20 @@ public class BookingsPanel extends JPanel implements MainFrame.Refreshable {
         panel.add(new JLabel("New status:"), BorderLayout.WEST);
         panel.add(combo, BorderLayout.CENTER);
 
-        int result = JOptionPane.showConfirmDialog(
+        int result = AppDialog.showConfirm(
                 this, panel, "Change Booking #" + bookingId + " Status",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
             String newStatus = (String) combo.getSelectedItem();
             try {
                 dao.updateStatus(bookingId, newStatus);
                 refreshData();
-                JOptionPane.showMessageDialog(this,
+                AppDialog.showMessage(this,
                         "Booking #" + bookingId + " updated to " + newStatus + ".",
                         "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this,
+                AppDialog.showMessage(this,
                         "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }

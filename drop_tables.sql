@@ -1,0 +1,12 @@
+-- ============================================================
+-- DROP ALL TABLES (clean start)
+-- Run this first if you need to reset the database
+-- ============================================================
+
+DROP TABLE BOOKING_SEAT CASCADE CONSTRAINTS;
+DROP TABLE BOOKING CASCADE CONSTRAINTS;
+DROP TABLE MOVIE_SHOW CASCADE CONSTRAINTS;
+DROP TABLE STAFF CASCADE CONSTRAINTS;
+DROP TABLE CUSTOMER CASCADE CONSTRAINTS;
+DROP TABLE HALL CASCADE CONSTRAINTS;
+DROP TABLE MOVIE CASCADE CONSTRAINTS;

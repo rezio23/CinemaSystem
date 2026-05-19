@@ -10,6 +10,7 @@ public class StyledButton extends JButton {
     public enum Variant { PRIMARY, SUCCESS, DANGER, SECONDARY }
 
     private final Variant variant;
+    private boolean active = false;
     private static final int ARC = Constants.BORDER_RADIUS;
 
     public StyledButton(String text, Variant variant) {
@@ -24,7 +25,7 @@ public class StyledButton extends JButton {
         setBorder(BorderFactory.createEmptyBorder(
             Constants.BUTTON_PADDING.top, Constants.BUTTON_PADDING.left,
             Constants.BUTTON_PADDING.bottom, Constants.BUTTON_PADDING.right));
-        setForeground(foregroundColor());
+        updateForeground();
     }
 
     @Override
@@ -34,8 +35,27 @@ public class StyledButton extends JButton {
         return d;
     }
 
+    public void setActive(boolean active) {
+        if (this.active == active) return;
+        this.active = active;
+        updateForeground();
+        repaint();
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    private Variant displayVariant() {
+        return active ? Variant.PRIMARY : variant;
+    }
+
+    private void updateForeground() {
+        setForeground(foregroundColor());
+    }
+
     private Color baseColor() {
-        return switch (variant) {
+        return switch (displayVariant()) {
             case PRIMARY -> Constants.COLOR_PRIMARY;
             case SUCCESS -> Constants.COLOR_SUCCESS;
             case DANGER -> Constants.COLOR_DANGER;
@@ -44,14 +64,14 @@ public class StyledButton extends JButton {
     }
 
     private Color foregroundColor() {
-        return switch (variant) {
+        return switch (displayVariant()) {
             case PRIMARY, SUCCESS, DANGER -> Color.WHITE;
             case SECONDARY -> Constants.COLOR_TEXT;
         };
     }
 
     private Color hoverColor() {
-        return switch (variant) {
+        return switch (displayVariant()) {
             case PRIMARY -> Constants.COLOR_PRIMARY_LIGHT;
             case SUCCESS -> new Color(0x34D399);
             case DANGER -> new Color(0xF87171);
@@ -60,7 +80,7 @@ public class StyledButton extends JButton {
     }
 
     private Color pressColor() {
-        return switch (variant) {
+        return switch (displayVariant()) {
             case PRIMARY -> Constants.COLOR_PRIMARY_DARK;
             case SUCCESS -> new Color(0x16A34A);
             case DANGER -> new Color(0xDC2626);

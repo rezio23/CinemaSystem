@@ -3,6 +3,7 @@ package com.cinema.ui;
 import com.cinema.dao.*;
 import com.cinema.model.Booking;
 import com.cinema.ui.components.*;
+import com.cinema.ui.dialog.AppDialog;
 import com.cinema.util.Constants;
 
 import javax.swing.*;
@@ -248,14 +249,13 @@ public class DashboardPanel extends JPanel implements MainFrame.Refreshable {
                     });
                 } catch (Exception ex) {
                     SwingUtilities.invokeLater(() -> {
-                        JOptionPane.showMessageDialog(
+                        AppDialog.showMessage(
                             DashboardPanel.this,
                             "Database error: " + ex.getMessage() + "\n\nPlease verify Oracle is running and tables exist.",
                             "Database Error",
                             JOptionPane.ERROR_MESSAGE
                         );
                     });
-                    ex.printStackTrace();
                 }
                 return null;
             }

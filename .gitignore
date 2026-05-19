@@ -49,13 +49,12 @@ desktop.ini
 *.tmp
 *.swp
 *~
+app_log.txt
+run_*.txt
 
-# --- Oracle / Database ---
-# Sample data and any local SQL scripts with sensitive info
-sample_data_oracle.sql
-*.sql
-!schema.sql
+# --- Database credentials ---
+# Copy db.properties.example to db.properties and fill in your credentials
+db.properties
 
-# --- Project-specific ---
-# Manual compile temp file from run.bat
+# --- Manual compile temp file from run.bat ---
 sources.txt

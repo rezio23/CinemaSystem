@@ -6,6 +6,8 @@ import com.cinema.service.BookingService;
 import com.cinema.service.CinemaException;
 import com.cinema.ui.components.SearchField;
 import com.cinema.ui.components.StyledButton;
+import com.cinema.ui.dialog.AppDialog;
+import com.cinema.ui.dialog.FormDialog;
 import com.cinema.util.Constants;
 
 import javax.swing.*;
@@ -14,7 +16,6 @@ import java.awt.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.*;
 
 public class BookingPanel extends JPanel implements MainFrame.Refreshable {
@@ -362,21 +363,14 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
         JTextField nameField = new JTextField(20);
         JTextField emailField = new JTextField(20);
         JTextField phoneField = new JTextField(20);
-        Constants.styleInput(nameField);
-        Constants.styleInput(emailField);
-        Constants.styleInput(phoneField);
 
-        JPanel panel = new JPanel(new GridLayout(0, 1, 8, 8));
-        panel.setBackground(Constants.COLOR_CARD);
-        panel.add(new JLabel("Full Name:"));
-        panel.add(nameField);
-        panel.add(new JLabel("Email:"));
-        panel.add(emailField);
-        panel.add(new JLabel("Phone:"));
-        panel.add(phoneField);
+        FormDialog dlg = new FormDialog(SwingUtilities.getWindowAncestor(this), "New Customer", 3);
+        dlg.addField("Full Name:", nameField);
+        dlg.addField("Email:", emailField);
+        dlg.addField("Phone:", phoneField);
+        dlg.setVisible(true);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "New Customer", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
+        if (dlg.isConfirmed()) {
             try {
                 Customer c = new Customer();
                 c.setFullName(nameField.getText().trim());
@@ -388,29 +382,29 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
                 customerListModel.clear();
                 customerListModel.addElement(c);
                 customerList.setSelectedIndex(0);
-                JOptionPane.showMessageDialog(this, "Customer created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AppDialog.showMessage(this, "Customer created successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                AppDialog.showMessage(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
     private void confirmBooking() {
         if (selectedShow == null) {
-            JOptionPane.showMessageDialog(this, "Please select a show.", "Error", JOptionPane.ERROR_MESSAGE);
+            AppDialog.showMessage(this, "Please select a show.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (selectedSeats.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please select at least one seat.", "Error", JOptionPane.ERROR_MESSAGE);
+            AppDialog.showMessage(this, "Please select at least one seat.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (selectedCustomer == null) {
-            JOptionPane.showMessageDialog(this, "Please select or create a customer.", "Error", JOptionPane.ERROR_MESSAGE);
+            AppDialog.showMessage(this, "Please select or create a customer.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         Staff staff = (Staff) staffCombo.getSelectedItem();
         if (staff == null) {
-            JOptionPane.showMessageDialog(this, "Please select staff.", "Error", JOptionPane.ERROR_MESSAGE);
+            AppDialog.showMessage(this, "Please select staff.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -450,7 +444,7 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
             parent.revalidate();
             parent.repaint();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Booking Failed", JOptionPane.ERROR_MESSAGE);
+            AppDialog.showMessage(this, ex.getMessage(), "Booking Failed", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -487,6 +481,6 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
         JScrollPane sp = new JScrollPane(area);
         sp.setBorder(BorderFactory.createEmptyBorder());
         sp.setPreferredSize(new Dimension(420, 360));
-        JOptionPane.showMessageDialog(this, sp, "Booking Confirmed", JOptionPane.INFORMATION_MESSAGE);
+        AppDialog.showContent(this, sp, "Booking Confirmed", JOptionPane.INFORMATION_MESSAGE);
     }
 }

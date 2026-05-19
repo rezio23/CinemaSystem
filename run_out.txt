@@ -1,1 +1,0 @@
-[4.994s][warning][os,thread] Failed to start thread "Unknown thread" - _beginthreadex failed (EACCES) for attributes: stacksize: default, flags: CREATE_SUSPENDED STACK_SIZE_PARAM_IS.
