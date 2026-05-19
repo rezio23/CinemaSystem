@@ -43,7 +43,7 @@ public class HallDao {
     public int insert(Hall h) {
         String sql = "INSERT INTO HALL (hall_name, capacity, hall_type) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(sql, new String[]{"hall_id"})) {
             ps.setString(1, h.getHallName());
             ps.setInt(2, h.getCapacity());
             ps.setString(3, h.getHallType());

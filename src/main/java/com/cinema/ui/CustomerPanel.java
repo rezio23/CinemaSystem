@@ -4,6 +4,7 @@ import com.cinema.dao.CustomerDao;
 import com.cinema.dao.ReportDao;
 import com.cinema.model.Customer;
 import com.cinema.ui.components.SearchField;
+import com.cinema.ui.components.StyledButton;
 import com.cinema.ui.dialog.FormDialog;
 import com.cinema.util.Constants;
 
@@ -42,26 +43,16 @@ public class CustomerPanel extends JPanel implements MainFrame.Refreshable {
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         btnPanel.setOpaque(false);
-        JButton addBtn = new JButton("+ Add Customer");
-        addBtn.setFont(Constants.FONT_BODY);
-        addBtn.setBackground(Constants.COLOR_SUCCESS);
-        addBtn.setForeground(Color.WHITE);
-        addBtn.setFocusPainted(false);
+        StyledButton addBtn = new StyledButton("+ Add Customer", StyledButton.Variant.SUCCESS);
         addBtn.addActionListener(e -> addCustomer());
 
-        JButton editBtn = new JButton("Edit");
-        editBtn.setFont(Constants.FONT_BODY);
+        StyledButton editBtn = new StyledButton("Edit", StyledButton.Variant.SECONDARY);
         editBtn.addActionListener(e -> editCustomer());
 
-        JButton delBtn = new JButton("Delete");
-        delBtn.setFont(Constants.FONT_BODY);
-        delBtn.setBackground(Constants.COLOR_DANGER);
-        delBtn.setForeground(Color.WHITE);
-        delBtn.setFocusPainted(false);
+        StyledButton delBtn = new StyledButton("Delete", StyledButton.Variant.DANGER);
         delBtn.addActionListener(e -> deleteCustomer());
 
-        JButton historyBtn = new JButton("View History");
-        historyBtn.setFont(Constants.FONT_BODY);
+        StyledButton historyBtn = new StyledButton("View History", StyledButton.Variant.SECONDARY);
         historyBtn.addActionListener(e -> viewHistory());
 
         btnPanel.add(addBtn);

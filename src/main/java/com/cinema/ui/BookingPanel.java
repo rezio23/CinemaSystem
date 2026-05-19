@@ -5,6 +5,7 @@ import com.cinema.model.*;
 import com.cinema.service.BookingService;
 import com.cinema.service.CinemaException;
 import com.cinema.ui.components.SearchField;
+import com.cinema.ui.components.StyledButton;
 import com.cinema.util.Constants;
 
 import javax.swing.*;
@@ -117,11 +118,7 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
 
         JPanel seatBottom = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         seatBottom.setOpaque(false);
-        clearBtn = new JButton("Clear Seats");
-        clearBtn.setFont(Constants.FONT_BODY);
-        clearBtn.setFocusPainted(false);
-        clearBtn.setBackground(Constants.COLOR_CARD_ELEVATED);
-        clearBtn.setForeground(Constants.COLOR_TEXT);
+        clearBtn = new StyledButton("Clear Seats", StyledButton.Variant.SECONDARY);
         clearBtn.addActionListener(e -> {
             if (seatPanel != null) seatPanel.clearSelection();
         });
@@ -149,9 +146,7 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
         customerSearchRow.setOpaque(false);
         customerSearchField = new JTextField(20);
         customerSearchField.setFont(Constants.FONT_BODY);
-        JButton searchCustomerBtn = new JButton("Search");
-        searchCustomerBtn.setFont(Constants.FONT_BODY);
-        searchCustomerBtn.setFocusPainted(false);
+        StyledButton searchCustomerBtn = new StyledButton("Search", StyledButton.Variant.SECONDARY);
         searchCustomerBtn.addActionListener(e -> searchCustomers());
         customerSearchRow.add(customerSearchField, BorderLayout.CENTER);
         customerSearchRow.add(searchCustomerBtn, BorderLayout.EAST);
@@ -222,20 +217,12 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
         actionCard.setBackground(Constants.COLOR_CARD);
         actionCard.setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
 
-        newCustomerBtn = new JButton("+ New Customer");
-        newCustomerBtn.setFont(Constants.FONT_BODY);
-        newCustomerBtn.setFocusPainted(false);
-        newCustomerBtn.setBackground(Constants.COLOR_CARD_ELEVATED);
-        newCustomerBtn.setForeground(Constants.COLOR_TEXT);
+        newCustomerBtn = new StyledButton("+ New Customer", StyledButton.Variant.SECONDARY);
         newCustomerBtn.addActionListener(e -> openNewCustomerDialog());
         actionCard.add(newCustomerBtn);
 
-        confirmBtn = new JButton("Confirm Booking");
+        confirmBtn = new StyledButton("Confirm Booking", StyledButton.Variant.PRIMARY);
         confirmBtn.setFont(Constants.FONT_SUBHEADER);
-        confirmBtn.setBackground(Constants.COLOR_PRIMARY);
-        confirmBtn.setForeground(Color.WHITE);
-        confirmBtn.setFocusPainted(false);
-        confirmBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         confirmBtn.addActionListener(e -> confirmBooking());
         actionCard.add(confirmBtn);
 
@@ -302,7 +289,8 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
         if (keyword.isEmpty()) {
             sorter.setRowFilter(null);
         } else {
-            sorter.setRowFilter(javax.swing.RowFilter.regexFilter("(?i)" + keyword, 1, 2));
+            String escaped = keyword.replace("\\", "\\\\").replace("$", "\\$").replace(".", "\\.").replace("*", "\\*").replace("+", "\\+").replace("?", "\\?").replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]").replace("{", "\\{").replace("}", "\\}").replace("|", "\\|").replace("^", "\\^");
+            sorter.setRowFilter(javax.swing.RowFilter.regexFilter("(?i)" + escaped, 1, 2));
         }
     }
 

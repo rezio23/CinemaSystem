@@ -2,6 +2,7 @@ package com.cinema.ui;
 
 import com.cinema.dao.HallDao;
 import com.cinema.model.Hall;
+import com.cinema.ui.components.StyledButton;
 import com.cinema.ui.dialog.FormDialog;
 import com.cinema.util.Constants;
 
@@ -31,22 +32,13 @@ public class HallPanel extends JPanel implements MainFrame.Refreshable {
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         btnPanel.setOpaque(false);
-        JButton addBtn = new JButton("+ Add Hall");
-        addBtn.setFont(Constants.FONT_BODY);
-        addBtn.setBackground(Constants.COLOR_SUCCESS);
-        addBtn.setForeground(Color.WHITE);
-        addBtn.setFocusPainted(false);
+        StyledButton addBtn = new StyledButton("+ Add Hall", StyledButton.Variant.SUCCESS);
         addBtn.addActionListener(e -> addHall());
 
-        JButton editBtn = new JButton("Edit");
-        editBtn.setFont(Constants.FONT_BODY);
+        StyledButton editBtn = new StyledButton("Edit", StyledButton.Variant.SECONDARY);
         editBtn.addActionListener(e -> editHall());
 
-        JButton delBtn = new JButton("Delete");
-        delBtn.setFont(Constants.FONT_BODY);
-        delBtn.setBackground(Constants.COLOR_DANGER);
-        delBtn.setForeground(Color.WHITE);
-        delBtn.setFocusPainted(false);
+        StyledButton delBtn = new StyledButton("Delete", StyledButton.Variant.DANGER);
         delBtn.addActionListener(e -> deleteHall());
 
         btnPanel.add(addBtn);

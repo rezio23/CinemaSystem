@@ -34,6 +34,7 @@ src/main/java/com/cinema/ui/components/SimpleDoughnutChart.java
 src/main/java/com/cinema/ui/components/SimpleLineChart.java
 src/main/java/com/cinema/ui/components/SimpleStatCard.java
 src/main/java/com/cinema/ui/components/StatCard.java
+src/main/java/com/cinema/ui/components/StyledButton.java
 src/main/java/com/cinema/ui/CustomerPanel.java
 src/main/java/com/cinema/ui/DashboardPanel.java
 src/main/java/com/cinema/ui/dialog/FormDialog.java

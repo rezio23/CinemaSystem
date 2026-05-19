@@ -64,7 +64,7 @@ public class CustomerDao {
     public int insert(Customer c) {
         String sql = "INSERT INTO CUSTOMER (full_name, email, phone, created_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(sql, new String[]{"customer_id"})) {
             ps.setString(1, c.getFullName());
             ps.setString(2, c.getEmail());
             ps.setString(3, c.getPhone());

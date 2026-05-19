@@ -44,7 +44,7 @@ public class BookingSeatDao {
     }
 
     public List<String> getTakenSeatNumbersByShow(int showId) {
-        String sql = "SELECT seat_number FROM BOOKING_SEAT WHERE show_id = ?";
+        String sql = "SELECT bs.seat_number FROM BOOKING_SEAT bs JOIN BOOKING b ON bs.booking_id = b.booking_id WHERE bs.show_id = ? AND b.status = 'CONFIRMED'";
         List<String> list = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -61,7 +61,7 @@ public class BookingSeatDao {
     }
 
     public List<String> getTakenSeatNumbersByShow(Connection conn, int showId) throws SQLException {
-        String sql = "SELECT seat_number FROM BOOKING_SEAT WHERE show_id = ?";
+        String sql = "SELECT bs.seat_number FROM BOOKING_SEAT bs JOIN BOOKING b ON bs.booking_id = b.booking_id WHERE bs.show_id = ? AND b.status = 'CONFIRMED'";
         List<String> list = new ArrayList<>();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, showId);
@@ -76,7 +76,7 @@ public class BookingSeatDao {
 
     public void insert(Connection conn, BookingSeat bs) throws SQLException {
         String sql = "INSERT INTO BOOKING_SEAT (booking_id, show_id, seat_number, seat_price, seat_type) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, bs.getBookingId());
             ps.setInt(2, bs.getShowId());
             ps.setString(3, bs.getSeatNumber());

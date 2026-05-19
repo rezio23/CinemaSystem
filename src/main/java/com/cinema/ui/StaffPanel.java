@@ -2,6 +2,7 @@ package com.cinema.ui;
 
 import com.cinema.dao.StaffDao;
 import com.cinema.model.Staff;
+import com.cinema.ui.components.StyledButton;
 import com.cinema.ui.dialog.FormDialog;
 import com.cinema.util.Constants;
 
@@ -33,22 +34,13 @@ public class StaffPanel extends JPanel implements MainFrame.Refreshable {
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         btnPanel.setOpaque(false);
-        JButton addBtn = new JButton("+ Add Staff");
-        addBtn.setFont(Constants.FONT_BODY);
-        addBtn.setBackground(Constants.COLOR_SUCCESS);
-        addBtn.setForeground(Color.WHITE);
-        addBtn.setFocusPainted(false);
+        StyledButton addBtn = new StyledButton("+ Add Staff", StyledButton.Variant.SUCCESS);
         addBtn.addActionListener(e -> addStaff());
 
-        JButton editBtn = new JButton("Edit");
-        editBtn.setFont(Constants.FONT_BODY);
+        StyledButton editBtn = new StyledButton("Edit", StyledButton.Variant.SECONDARY);
         editBtn.addActionListener(e -> editStaff());
 
-        JButton delBtn = new JButton("Delete");
-        delBtn.setFont(Constants.FONT_BODY);
-        delBtn.setBackground(Constants.COLOR_DANGER);
-        delBtn.setForeground(Color.WHITE);
-        delBtn.setFocusPainted(false);
+        StyledButton delBtn = new StyledButton("Delete", StyledButton.Variant.DANGER);
         delBtn.addActionListener(e -> deleteStaff());
 
         btnPanel.add(addBtn);
@@ -136,7 +128,7 @@ public class StaffPanel extends JPanel implements MainFrame.Refreshable {
     private Staff showForm(Staff s) {
         JTextField name = new JTextField(s != null ? s.getFullName() : "");
         JTextField role = new JTextField(s != null ? s.getRole() : "");
-        JTextField hireDate = new JTextField(s != null ? s.getHireDate().toString() : LocalDate.now().toString());
+        JTextField hireDate = new JTextField(s != null && s.getHireDate() != null ? s.getHireDate().toString() : LocalDate.now().toString());
 
         FormDialog dlg = new FormDialog(SwingUtilities.getWindowAncestor(this), s == null ? "Add Staff" : "Edit Staff", 3);
         dlg.addField("Full Name:", name);

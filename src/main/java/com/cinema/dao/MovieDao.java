@@ -63,7 +63,7 @@ public class MovieDao {
     public int insert(Movie m) {
         String sql = "INSERT INTO MOVIE (title, genre, director, duration_min, rating, release_year) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(sql, new String[]{"movie_id"})) {
             ps.setString(1, m.getTitle());
             ps.setString(2, m.getGenre());
             ps.setString(3, m.getDirector());

@@ -76,18 +76,18 @@ public class MovieShowDao {
     }
 
     public boolean hasOverlap(int hallId, LocalDateTime start, LocalDateTime end, Integer excludeShowId) {
-        // Use a 3-hour window on both sides as a safe overlap guard
-        LocalDateTime searchStart = start.minusHours(3);
-        LocalDateTime searchEnd = start.plusHours(3);
         String sql =
-            "SELECT COUNT(*) FROM MOVIE_SHOW " +
-            "WHERE hall_id = ? AND show_datetime BETWEEN ? AND ?" +
-            (excludeShowId != null ? " AND show_id <> ?" : "");
+            "SELECT COUNT(*) FROM MOVIE_SHOW ms " +
+            "JOIN MOVIE m ON ms.movie_id = m.movie_id " +
+            "WHERE ms.hall_id = ? " +
+            "AND ms.show_datetime < ? " +
+            "AND (ms.show_datetime + NUMTODSINTERVAL(COALESCE(m.duration_min, 150), 'MINUTE')) > ?" +
+            (excludeShowId != null ? " AND ms.show_id <> ?" : "");
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, hallId);
-            ps.setTimestamp(2, Timestamp.valueOf(searchStart));
-            ps.setTimestamp(3, Timestamp.valueOf(searchEnd));
+            ps.setTimestamp(2, Timestamp.valueOf(end));
+            ps.setTimestamp(3, Timestamp.valueOf(start));
             if (excludeShowId != null) {
                 ps.setInt(4, excludeShowId);
             }
@@ -105,7 +105,7 @@ public class MovieShowDao {
     public int insert(MovieShow s) {
         String sql = "INSERT INTO MOVIE_SHOW (movie_id, hall_id, show_datetime, base_price) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(sql, new String[]{"show_id"})) {
             ps.setInt(1, s.getMovieId());
             ps.setInt(2, s.getHallId());
             ps.setTimestamp(3, Timestamp.valueOf(s.getShowDateTime()));

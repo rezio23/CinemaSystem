@@ -30,7 +30,6 @@ public class SidebarButton extends JButton {
         setHorizontalAlignment(SwingConstants.LEFT);
         setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 16));
 
-        putClientProperty(FlatClientProperties.STYLE, "arc: 8");
         updateIconColor();
     }
 

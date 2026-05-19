@@ -43,7 +43,7 @@ public class StaffDao {
     public int insert(Staff s) {
         String sql = "INSERT INTO STAFF (full_name, role, hire_date) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(sql, new String[]{"staff_id"})) {
             ps.setString(1, s.getFullName());
             ps.setString(2, s.getRole());
             ps.setDate(3, Date.valueOf(s.getHireDate()));

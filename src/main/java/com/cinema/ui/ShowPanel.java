@@ -9,6 +9,8 @@ import com.cinema.model.MovieShow;
 import com.cinema.ui.dialog.FormDialog;
 import com.cinema.util.Constants;
 
+import com.cinema.ui.components.StyledButton;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -41,22 +43,13 @@ public class ShowPanel extends JPanel implements MainFrame.Refreshable {
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         btnPanel.setOpaque(false);
-        JButton addBtn = new JButton("+ Add Show");
-        addBtn.setFont(Constants.FONT_BODY);
-        addBtn.setBackground(Constants.COLOR_SUCCESS);
-        addBtn.setForeground(Color.WHITE);
-        addBtn.setFocusPainted(false);
+        StyledButton addBtn = new StyledButton("+ Add Show", StyledButton.Variant.SUCCESS);
         addBtn.addActionListener(e -> addShow());
 
-        JButton editBtn = new JButton("Edit");
-        editBtn.setFont(Constants.FONT_BODY);
+        StyledButton editBtn = new StyledButton("Edit", StyledButton.Variant.SECONDARY);
         editBtn.addActionListener(e -> editShow());
 
-        JButton delBtn = new JButton("Delete");
-        delBtn.setFont(Constants.FONT_BODY);
-        delBtn.setBackground(Constants.COLOR_DANGER);
-        delBtn.setForeground(Color.WHITE);
-        delBtn.setFocusPainted(false);
+        StyledButton delBtn = new StyledButton("Delete", StyledButton.Variant.DANGER);
         delBtn.addActionListener(e -> deleteShow());
 
         btnPanel.add(addBtn);
@@ -99,7 +92,9 @@ public class ShowPanel extends JPanel implements MainFrame.Refreshable {
         MovieShow s = showForm(null);
         if (s != null) {
             try {
-                if (showDao.hasOverlap(s.getHallId(), s.getShowDateTime(), s.getShowDateTime().plusMinutes(150), null)) {
+                Movie movie = movieDao.getById(s.getMovieId());
+                int duration = movie != null && movie.getDurationMin() > 0 ? movie.getDurationMin() : 150;
+                if (showDao.hasOverlap(s.getHallId(), s.getShowDateTime(), s.getShowDateTime().plusMinutes(duration), null)) {
                     JOptionPane.showMessageDialog(this, "There is already a show in this hall around that time.", "Overlap", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
@@ -121,7 +116,9 @@ public class ShowPanel extends JPanel implements MainFrame.Refreshable {
         if (updated != null) {
             try {
                 updated.setShowId(id);
-                if (showDao.hasOverlap(updated.getHallId(), updated.getShowDateTime(), updated.getShowDateTime().plusMinutes(150), id)) {
+                Movie movie = movieDao.getById(updated.getMovieId());
+                int duration = movie != null && movie.getDurationMin() > 0 ? movie.getDurationMin() : 150;
+                if (showDao.hasOverlap(updated.getHallId(), updated.getShowDateTime(), updated.getShowDateTime().plusMinutes(duration), id)) {
                     JOptionPane.showMessageDialog(this, "There is already a show in this hall around that time.", "Overlap", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
