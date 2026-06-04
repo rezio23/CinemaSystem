@@ -270,6 +270,7 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
             protected Void doInBackground() {
                 loadShows();
                 loadStaff();
+                loadCustomers();
                 return null;
             }
         };
@@ -277,7 +278,7 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
     }
 
     private void loadShows() {
-        List<MovieShow> shows = showDao.getUpcoming();
+        List<MovieShow> shows = showDao.getAll();
         SwingUtilities.invokeLater(() -> {
             showModel.setRowCount(0);
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd HH:mm");
@@ -314,6 +315,16 @@ public class BookingPanel extends JPanel implements MainFrame.Refreshable {
             staffCombo.removeAllItems();
             for (Staff s : staff) {
                 staffCombo.addItem(s);
+            }
+        });
+    }
+
+    private void loadCustomers() {
+        List<Customer> customers = customerDao.getAll();
+        SwingUtilities.invokeLater(() -> {
+            customerListModel.clear();
+            for (Customer c : customers) {
+                customerListModel.addElement(c);
             }
         });
     }

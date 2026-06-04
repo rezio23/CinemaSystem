@@ -17,13 +17,14 @@ public class Main {
             Font defaultFont = new Font("Segoe UI", Font.PLAIN, 14);
             UIManager.put("defaultFont", defaultFont);
 
-            // Rounded corners everywhere FlatLaf supports
+            // Keep controls rounded without turning inputs into pill shapes.
             UIManager.put("Button.arc", 10);
-            UIManager.put("Component.arc", 10);
-            UIManager.put("TextComponent.arc", 10);
+            UIManager.put("Component.arc", 8);
+            UIManager.put("TextComponent.arc", 8);
             UIManager.put("ScrollPane.arc", 10);
             UIManager.put("ProgressBar.arc", 10);
-            UIManager.put("Spinner.arc", 10);
+            UIManager.put("ComboBox.arc", 8);
+            UIManager.put("Spinner.arc", 8);
             UIManager.put("Slider.trackWidth", 4);
 
             // Panel / viewport backgrounds

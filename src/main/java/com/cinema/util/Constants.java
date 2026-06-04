@@ -57,6 +57,7 @@ public final class Constants {
     public static final int INPUT_HEIGHT = 36;
     public static final int PAGE_HEADER_GAP = 12;
     public static final int BORDER_RADIUS = 8;
+    public static final int INPUT_BORDER_RADIUS = BORDER_RADIUS;
     public static final java.awt.Insets INPUT_PADDING = new java.awt.Insets(8, 14, 8, 14);
     public static final java.awt.Insets BUTTON_PADDING = new java.awt.Insets(8, 16, 8, 16);
     public static final Color INPUT_BORDER_COLOR = new Color(0xD0D9E2);
@@ -82,16 +83,21 @@ public final class Constants {
 
     public static javax.swing.border.Border inputBorder() {
         return javax.swing.BorderFactory.createCompoundBorder(
-            createRoundedBorder(INPUT_BORDER_COLOR, 1, BORDER_RADIUS),
+            createRoundedBorder(INPUT_BORDER_COLOR, 1, INPUT_BORDER_RADIUS),
             javax.swing.BorderFactory.createEmptyBorder(INPUT_PADDING.top, INPUT_PADDING.left, INPUT_PADDING.bottom, INPUT_PADDING.right)
         );
     }
 
     public static javax.swing.border.Border inputBorderFocused() {
         return javax.swing.BorderFactory.createCompoundBorder(
-            createRoundedBorder(COLOR_PRIMARY, 1, BORDER_RADIUS),
+            createRoundedBorder(COLOR_PRIMARY, 1, INPUT_BORDER_RADIUS),
             javax.swing.BorderFactory.createEmptyBorder(INPUT_PADDING.top, INPUT_PADDING.left, INPUT_PADDING.bottom, INPUT_PADDING.right)
         );
+    }
+
+    private static void useRoundedInputShape(javax.swing.JComponent component) {
+        component.putClientProperty("JComponent.roundRect", null);
+        component.putClientProperty("FlatLaf.style", "arc: " + INPUT_BORDER_RADIUS);
     }
 
     public static void styleInput(javax.swing.JTextField field) {
@@ -99,7 +105,7 @@ public final class Constants {
         field.setFont(FONT_BODY);
         field.setForeground(COLOR_TEXT);
         field.setCaretColor(COLOR_TEXT);
-        field.putClientProperty("JComponent.roundRect", true);
+        useRoundedInputShape(field);
         field.setBorder(inputBorder());
         field.setPreferredSize(new java.awt.Dimension(field.getPreferredSize().width, INPUT_HEIGHT));
     }
@@ -108,7 +114,8 @@ public final class Constants {
         combo.setBackground(COLOR_CARD_ELEVATED);
         combo.setFont(FONT_BODY);
         combo.setForeground(COLOR_TEXT);
-        combo.putClientProperty("JComponent.roundRect", true);
+        useRoundedInputShape(combo);
+        combo.setBorder(inputBorder());
         combo.setPreferredSize(new java.awt.Dimension(combo.getPreferredSize().width, INPUT_HEIGHT));
     }
 
@@ -116,6 +123,7 @@ public final class Constants {
         javax.swing.JPanel wrapper = new javax.swing.JPanel(new java.awt.BorderLayout());
         wrapper.setBackground(COLOR_CARD_ELEVATED);
         wrapper.setBorder(inputBorder());
+        useRoundedInputShape(component);
         if (component instanceof javax.swing.JTextField) {
             ((javax.swing.JTextField) component).setBorder(null);
             ((javax.swing.JTextField) component).setOpaque(false);
@@ -132,7 +140,7 @@ public final class Constants {
 
     public static void styleInput(javax.swing.JSpinner spinner) {
         spinner.setFont(FONT_BODY);
-        spinner.putClientProperty("JComponent.roundRect", true);
+        useRoundedInputShape(spinner);
         spinner.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         spinner.setPreferredSize(new java.awt.Dimension(spinner.getPreferredSize().width, INPUT_HEIGHT));
         javax.swing.JComponent editor = spinner.getEditor();
@@ -142,7 +150,7 @@ public final class Constants {
             tf.setForeground(COLOR_TEXT);
             tf.setCaretColor(COLOR_TEXT);
             tf.setFont(FONT_BODY);
-            tf.putClientProperty("JComponent.roundRect", true);
+            useRoundedInputShape(tf);
             tf.setBorder(inputBorder());
             tf.setPreferredSize(new java.awt.Dimension(tf.getPreferredSize().width, INPUT_HEIGHT));
         }

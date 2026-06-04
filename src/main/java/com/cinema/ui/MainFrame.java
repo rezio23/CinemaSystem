@@ -37,11 +37,11 @@ public class MainFrame extends JFrame {
         contentPanel.add(new DashboardPanel(), "DASHBOARD");
         contentPanel.add(new BookingPanel(), "BOOKING");
         contentPanel.add(new BookingsPanel(), "BOOKINGS");
-        contentPanel.add(new MoviePanel(), "MOVIES");
-        contentPanel.add(new HallPanel(), "HALLS");
-        contentPanel.add(new StaffPanel(), "STAFF");
-        contentPanel.add(new CustomerPanel(), "CUSTOMERS");
-        contentPanel.add(new ShowPanel(), "SHOWS");
+        // contentPanel.add(new MoviePanel(), "MOVIES");
+        // contentPanel.add(new HallPanel(), "HALLS");
+        // contentPanel.add(new StaffPanel(), "STAFF");
+        // contentPanel.add(new CustomerPanel(), "CUSTOMERS");
+        // contentPanel.add(new ShowPanel(), "SHOWS");
         contentPanel.add(new ReportsPanel(), "REPORTS");
 
         root.add(contentPanel, BorderLayout.CENTER);
@@ -81,11 +81,11 @@ public class MainFrame extends JFrame {
         addNavButton(sidebar, "Dashboard", SidebarIcon.Type.DASHBOARD, "DASHBOARD");
         addNavButton(sidebar, "Sell Tickets", SidebarIcon.Type.TICKETS, "BOOKING");
         addNavButton(sidebar, "Bookings", SidebarIcon.Type.BOOKINGS, "BOOKINGS");
-        addNavButton(sidebar, "Movies", SidebarIcon.Type.MOVIES, "MOVIES");
-        addNavButton(sidebar, "Halls", SidebarIcon.Type.HALLS, "HALLS");
-        addNavButton(sidebar, "Staff", SidebarIcon.Type.STAFF, "STAFF");
-        addNavButton(sidebar, "Customers", SidebarIcon.Type.CUSTOMERS, "CUSTOMERS");
-        addNavButton(sidebar, "Shows", SidebarIcon.Type.SHOWS, "SHOWS");
+        // addNavButton(sidebar, "Movies", SidebarIcon.Type.MOVIES, "MOVIES");
+        // addNavButton(sidebar, "Halls", SidebarIcon.Type.HALLS, "HALLS");
+        // addNavButton(sidebar, "Staff", SidebarIcon.Type.STAFF, "STAFF");
+        // addNavButton(sidebar, "Customers", SidebarIcon.Type.CUSTOMERS, "CUSTOMERS");
+        // addNavButton(sidebar, "Shows", SidebarIcon.Type.SHOWS, "SHOWS");
         addNavButton(sidebar, "Reports", SidebarIcon.Type.REPORTS, "REPORTS");
 
         sidebar.add(Box.createVerticalGlue());

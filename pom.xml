@@ -59,6 +59,9 @@
                 <version>3.2.0</version>
                 <configuration>
                     <mainClass>com.cinema.Main</mainClass>
+                    <jvmArgs>
+                        <jvmArg>--enable-native-access=ALL-UNNAMED</jvmArg>
+                    </jvmArgs>
                 </configuration>
             </plugin>
             <plugin>

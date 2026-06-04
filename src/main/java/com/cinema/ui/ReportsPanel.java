@@ -57,7 +57,8 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
     private JPanel revenueMovieChartHolder;
     private JPanel occupancyChartHolder;
 
-    private static final DateTimeFormatter SPINNER_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final String DATE_PATTERN = "yyyy/MM/dd";
+    private static final DateTimeFormatter SPINNER_FORMAT = DateTimeFormatter.ofPattern(DATE_PATTERN);
 
     public ReportsPanel() {
         setLayout(new BorderLayout(20, 20));
@@ -148,9 +149,13 @@ public class ReportsPanel extends JPanel implements MainFrame.Refreshable {
     private JSpinner createDateSpinner() {
         SpinnerDateModel model = new SpinnerDateModel();
         JSpinner spinner = new JSpinner(model);
-        spinner.setEditor(new JSpinner.DateEditor(spinner, "yyyy-MM-dd"));
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(spinner, DATE_PATTERN);
+        editor.getTextField().setColumns(DATE_PATTERN.length());
+        spinner.setEditor(editor);
         Constants.styleInput(spinner);
-        spinner.setPreferredSize(new Dimension(120, 36));
+        Dimension size = new Dimension(150, Constants.INPUT_HEIGHT);
+        spinner.setPreferredSize(size);
+        spinner.setMinimumSize(size);
         return spinner;
     }
 
